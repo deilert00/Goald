@@ -1,0 +1,38 @@
+name: E2E BDD Tests
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  bdd-e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run BDD E2E suite
+        env:
+          BASE_URL: ${{ vars.BASE_URL || 'http://localhost:3000' }}
+        run: npm run test:e2e
+
+      - name: Upload cucumber report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: reports/

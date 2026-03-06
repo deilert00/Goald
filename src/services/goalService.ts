@@ -1,0 +1,82 @@
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+  onSnapshot,
+  serverTimestamp,
+  Timestamp,
+  QueryDocumentSnapshot,
+} from 'firebase/firestore';
+import { db } from './firebase';
+
+export interface Goal {
+  id: string;
+  userId: string;
+  name: string;
+  targetAmount: number;
+  monthlyContribution: number;
+  annualInterestRate: number;
+  timelineMonths?: number;
+  createdAt: Timestamp;
+  completedAt?: Timestamp;
+  currentBalance: number;
+}
+
+function mapGoal(snap: QueryDocumentSnapshot): Goal {
+  const d = snap.data();
+  return {
+    id: snap.id,
+    userId: d.userId,
+    name: d.name,
+    targetAmount: d.targetAmount,
+    monthlyContribution: d.monthlyContribution,
+    annualInterestRate: d.annualInterestRate,
+    timelineMonths: d.timelineMonths,
+    createdAt: d.createdAt,
+    completedAt: d.completedAt,
+    currentBalance: d.currentBalance ?? 0,
+  };
+}
+
+export async function createGoal(
+  userId: string,
+  data: Omit<Goal, 'id' | 'userId' | 'createdAt' | 'currentBalance'>
+): Promise<string> {
+  const ref = await addDoc(collection(db, 'goals'), {
+    ...data,
+    userId,
+    currentBalance: 0,
+    createdAt: serverTimestamp(),
+  });
+  return ref.id;
+}
+
+export async function updateGoalBalance(goalId: string, newBalance: number): Promise<void> {
+  await updateDoc(doc(db, 'goals', goalId), { currentBalance: newBalance });
+}
+
+export async function markGoalCompleted(goalId: string): Promise<void> {
+  await updateDoc(doc(db, 'goals', goalId), { completedAt: serverTimestamp() });
+}
+
+export async function deleteGoal(goalId: string): Promise<void> {
+  await deleteDoc(doc(db, 'goals', goalId));
+}
+
+export function subscribeGoals(userId: string, cb: (goals: Goal[]) => void): () => void {
+  const q = query(collection(db, 'goals'), where('userId', '==', userId));
+  return onSnapshot(q, (snap) => {
+    cb(snap.docs.map(mapGoal));
+  });
+}
+
+export async function getUserGoals(userId: string): Promise<Goal[]> {
+  const q = query(collection(db, 'goals'), where('userId', '==', userId));
+  const snap = await getDocs(q);
+  return snap.docs.map(mapGoal);
+}

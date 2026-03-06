@@ -1,0 +1,38 @@
+{
+  "name": "goald",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "private": true,
+  "description": "Visual Compounding – save toward goals with animated progress visuals",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test:e2e": "cucumber-js --config cucumber.js",
+    "test:e2e:headed": "cross-env HEADLESS=false cucumber-js --config cucumber.js",
+    "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html"
+  },
+  "dependencies": {
+    "expo": "~52.0.0",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.5",
+    "firebase": "10.14.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "react-native-screens": "^3.34.0",
+    "react-native-safe-area-context": "^4.14.0",
+    "expo-notifications": "~0.29.0",
+    "expo-constants": "~17.0.3",
+    "react-native-gesture-handler": "~2.20.0"
+  },
+  "devDependencies": {
+    "@types/react": "~18.3.12",
+    "typescript": "~5.3.3",
+    "@cucumber/cucumber": "^11.2.0",
+    "cross-env": "^7.0.3",
+    "playwright": "^1.52.0"
+  }
+}
