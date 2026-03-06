@@ -17,7 +17,7 @@ export type RootStackParamList = {
   Landing: undefined;
   Login: undefined;
   Register: undefined;
-  AppTabs: undefined;
+  AppTabs: { screen?: 'Dashboard' | 'Badges' } | undefined;
   CreateGoal: undefined;
   GoalDetail: { goalId: string };
   EditGoal: { goalId: string };

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   SafeAreaView,
   TextInput,
 } from 'react-native';
@@ -17,6 +16,8 @@ import { useAuth } from '../../hooks/useAuth';
 import ProgressBar from '../../components/ProgressBar';
 import MilestoneAnimation from '../../components/MilestoneAnimation';
 import { projectGrowth, estimateCompletionMonths } from '../../utils/compoundInterest';
+import SidebarNav from '../../components/SidebarNav';
+import AppButton from '../../components/AppButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'GoalDetail'>;
@@ -79,14 +80,21 @@ export default function GoalDetailScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
+        <SidebarNav
+          onDashboard={() => navigation.navigate('AppTabs', { screen: 'Dashboard' })}
+          onBadges={() => navigation.navigate('AppTabs', { screen: 'Badges' })}
+          onCreateGoal={() => navigation.navigate('CreateGoal')}
+        />
+
         <Text style={styles.title}>{goal.name}</Text>
 
-        <TouchableOpacity
-          style={styles.editBtn}
+        <AppButton
+          label="Edit Goal"
+          variant="secondary"
           onPress={() => navigation.navigate('EditGoal', { goalId })}
-        >
-          <Text style={styles.editBtnText}>Edit Goal</Text>
-        </TouchableOpacity>
+          style={styles.editBtn}
+          accessibilityLabel="goal-edit-btn"
+        />
 
         <MilestoneAnimation progress={progress} theme={goal.visualTheme} />
 
@@ -155,12 +163,12 @@ export default function GoalDetailScreen() {
           )}
         </View>
 
-        <TouchableOpacity
-          style={styles.depositBtn}
+        <AppButton
+          label="+ Add Deposit"
           onPress={() => navigation.navigate('Deposit', { goalId })}
-        >
-          <Text style={styles.depositBtnText}>+ Add Deposit</Text>
-        </TouchableOpacity>
+          style={styles.depositBtn}
+          accessibilityLabel="goal-add-deposit"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -177,21 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'center',
   },
-  editBtn: {
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#CFE8D0',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    marginBottom: 10,
-  },
-  editBtnText: {
-    color: '#2E7D32',
-    fontWeight: '700',
-    fontSize: 13,
-  },
+  editBtn: { alignSelf: 'center', marginBottom: 10, minWidth: 150 },
   balanceText: { textAlign: 'center', fontSize: 16, color: '#555', marginTop: 8, marginBottom: 16 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 },
   stat: { alignItems: 'center' },
@@ -229,12 +223,5 @@ const styles = StyleSheet.create({
   depositAmount: { fontSize: 16, fontWeight: '600', color: '#4CAF50' },
   depositNote: { fontSize: 12, color: '#666', marginTop: 2, maxWidth: 220 },
   depositDate: { fontSize: 14, color: '#888' },
-  depositBtn: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 24,
-  },
-  depositBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  depositBtn: { marginTop: 24 },
 });
