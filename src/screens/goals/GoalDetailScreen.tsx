@@ -61,6 +61,13 @@ export default function GoalDetailScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>{goal.name}</Text>
 
+        <TouchableOpacity
+          style={styles.editBtn}
+          onPress={() => navigation.navigate('EditGoal', { goalId })}
+        >
+          <Text style={styles.editBtnText}>Edit Goal</Text>
+        </TouchableOpacity>
+
         <MilestoneAnimation progress={progress} theme={goal.visualTheme} />
 
         <ProgressBar progress={progress} height={16} />
@@ -139,6 +146,21 @@ const styles = StyleSheet.create({
     color: '#1A1A2E',
     marginBottom: 8,
     textAlign: 'center',
+  },
+  editBtn: {
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#CFE8D0',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+  },
+  editBtnText: {
+    color: '#2E7D32',
+    fontWeight: '700',
+    fontSize: 13,
   },
   balanceText: { textAlign: 'center', fontSize: 16, color: '#555', marginTop: 8, marginBottom: 16 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 },

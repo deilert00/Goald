@@ -11,6 +11,7 @@ import {
   serverTimestamp,
   Timestamp,
   QueryDocumentSnapshot,
+  writeBatch,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -40,7 +41,7 @@ function mapGoal(snap: QueryDocumentSnapshot): Goal {
     monthlyContribution: d.monthlyContribution,
     annualInterestRate: d.annualInterestRate,
     timelineMonths: d.timelineMonths,
-      visualTheme: d.visualTheme ?? 'tree',
+    visualTheme: d.visualTheme ?? 'tree',
     createdAt: d.createdAt,
     completedAt: d.completedAt,
     currentBalance: d.currentBalance ?? 0,
@@ -66,17 +67,32 @@ export async function updateGoalBalance(goalId: string, newBalance: number): Pro
 
 export async function markGoalCompleted(goalId: string): Promise<void> {
   await updateDoc(doc(db, 'goals', goalId), { completedAt: serverTimestamp() });
+}
+
 export async function updateGoal(
   goalId: string,
-  updates: Partial<Pick<Goal, 'name' | 'monthlyContribution' | 'annualInterestRate' | 'visualTheme' | 'timelineMonths'>>
+  updates: Partial<
+    Pick<Goal, 'name' | 'monthlyContribution' | 'annualInterestRate' | 'visualTheme' | 'timelineMonths'>
+  >
 ): Promise<void> {
   await updateDoc(doc(db, 'goals', goalId), updates);
 }
 
-}
-
 export async function deleteGoal(goalId: string): Promise<void> {
   await deleteDoc(doc(db, 'goals', goalId));
+}
+
+export async function deleteGoalWithDeposits(goalId: string): Promise<void> {
+  const batch = writeBatch(db);
+
+  const depositsQuery = query(collection(db, 'deposits'), where('goalId', '==', goalId));
+  const depositsSnap = await getDocs(depositsQuery);
+  depositsSnap.docs.forEach((depositDoc) => {
+    batch.delete(depositDoc.ref);
+  });
+
+  batch.delete(doc(db, 'goals', goalId));
+  await batch.commit();
 }
 
 export function subscribeGoals(userId: string, cb: (goals: Goal[]) => void): () => void {

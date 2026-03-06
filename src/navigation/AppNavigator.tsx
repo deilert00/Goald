@@ -9,6 +9,7 @@ import AppTabs from './AppTabs';
 import CreateGoalScreen from '../screens/goals/CreateGoalScreen';
 import GoalDetailScreen from '../screens/goals/GoalDetailScreen';
 import DepositScreen from '../screens/goals/DepositScreen';
+import EditGoalScreen from '../screens/goals/EditGoalScreen';
 import CelebrationScreen from '../screens/CelebrationScreen';
 
 export type RootStackParamList = {
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   AppTabs: undefined;
   CreateGoal: undefined;
   GoalDetail: { goalId: string };
+  EditGoal: { goalId: string };
   Deposit: { goalId: string };
   Celebration: { goalId: string; goalName: string };
 };
@@ -49,6 +51,11 @@ export default function AppNavigator() {
               name="GoalDetail"
               component={GoalDetailScreen}
               options={{ headerShown: true, title: 'Goal Details' }}
+            />
+            <Stack.Screen
+              name="EditGoal"
+              component={EditGoalScreen}
+              options={{ headerShown: true, title: 'Edit Goal', presentation: 'modal' }}
             />
             <Stack.Screen
               name="Deposit"
