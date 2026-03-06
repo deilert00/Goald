@@ -11,7 +11,7 @@ const EMOJIS = ['🎉', '🌟', '✨', '🎊', '💰', '🏆'];
 
 function ConfettiItem({ index }: { index: number }) {
   const anim = useRef(new Animated.Value(0)).current;
-  const left = useRef(`${Math.floor(Math.random() * 100)}%`).current;
+  const left = useRef(Math.floor(Math.random() * 100)).current;
   const delay = useRef(Math.random() * 1500).current;
   const duration = useRef(1500 + Math.random() * 1000).current;
 
@@ -33,7 +33,7 @@ function ConfettiItem({ index }: { index: number }) {
     <Animated.Text
       style={[
         styles.confettiItem,
-        { left: left as any, transform: [{ translateY }], opacity },
+        { left: `${left}%` as any, transform: [{ translateY }], opacity },
       ]}
     >
       {EMOJIS[index % EMOJIS.length]}

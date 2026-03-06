@@ -20,9 +20,10 @@ export function estimateCompletionMonths(
   monthlyContribution: number,
   annualInterestRate: number
 ): number {
-  if (monthlyContribution <= 0 && annualInterestRate <= 0) return Infinity;
-  // Zero contributions with no existing balance to compound will never grow
-  if (monthlyContribution <= 0 && currentBalance <= 0) return Infinity;
+  // Cannot grow without contributions or interest, or without a starting balance to compound
+  if (monthlyContribution <= 0 && (annualInterestRate <= 0 || currentBalance <= 0)) {
+    return Infinity;
+  }
   const monthlyRate = annualInterestRate / 100 / 12;
   let balance = currentBalance;
   let months = 0;

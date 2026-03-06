@@ -18,7 +18,7 @@ import { addDeposit } from '../../services/depositService';
 import { updateGoalBalance, markGoalCompleted } from '../../services/goalService';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
-import { computeEarnedBadges } from '../../utils/badges';
+import { computeEarnedBadges, BadgeId } from '../../utils/badges';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -89,7 +89,7 @@ export default function DepositScreen() {
         goalCount,
         hasHalfway: wasBelowHalfway && isNowAtOrAboveHalfway,
         hasCompleted: isCompleted,
-        existingBadges: (stats.badges as string[]) ?? [],
+        existingBadges: ((stats.badges ?? []) as BadgeId[]),
       });
 
       await updateDoc(statsRef, {
