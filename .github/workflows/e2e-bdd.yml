@@ -25,6 +25,17 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
+      - name: Build Expo web app
+        env:
+          EXPO_PUBLIC_E2E_MODE: "true"
+        run: npx expo export --platform web
+
+      - name: Start web server
+        run: npx serve dist --no-clipboard -l 3000 &
+
+      - name: Wait for web server to be ready
+        run: npx wait-on http://localhost:3000 --timeout 60000
+
       - name: Run BDD E2E suite
         env:
           BASE_URL: ${{ vars.BASE_URL || 'http://localhost:3000' }}

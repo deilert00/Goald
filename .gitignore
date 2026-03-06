@@ -44,3 +44,6 @@ yarn-error.*
 .env
 google-services.json
 GoogleService-Info.plist
+
+# E2E test reports (generated artifacts)
+reports/
