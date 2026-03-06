@@ -16,6 +16,14 @@ import {
 import { db } from './firebase';
 
 import { ThemeType } from '../types/Theme';
+import { isE2EMode } from '../config/runtime';
+import {
+  e2eCreateGoal,
+  e2eDeleteGoal,
+  e2eGetGoals,
+  e2eGoalsSubscribe,
+  e2eUpdateGoal,
+} from './e2eStore';
 
 export interface Goal {
   id: string;
@@ -52,6 +60,9 @@ export async function createGoal(
   userId: string,
   data: Omit<Goal, 'id' | 'userId' | 'createdAt' | 'currentBalance'>
 ): Promise<string> {
+  if (isE2EMode) {
+    return e2eCreateGoal(userId, data);
+  }
   const ref = await addDoc(collection(db, 'goals'), {
     ...data,
     userId,
@@ -62,10 +73,18 @@ export async function createGoal(
 }
 
 export async function updateGoalBalance(goalId: string, newBalance: number): Promise<void> {
+  if (isE2EMode) {
+    e2eUpdateGoal(goalId, { currentBalance: newBalance });
+    return;
+  }
   await updateDoc(doc(db, 'goals', goalId), { currentBalance: newBalance });
 }
 
 export async function markGoalCompleted(goalId: string): Promise<void> {
+  if (isE2EMode) {
+    e2eUpdateGoal(goalId, { completedAt: serverTimestamp() as unknown as Timestamp });
+    return;
+  }
   await updateDoc(doc(db, 'goals', goalId), { completedAt: serverTimestamp() });
 }
 
@@ -75,14 +94,26 @@ export async function updateGoal(
     Pick<Goal, 'name' | 'monthlyContribution' | 'annualInterestRate' | 'visualTheme' | 'timelineMonths'>
   >
 ): Promise<void> {
+  if (isE2EMode) {
+    e2eUpdateGoal(goalId, updates as Partial<Goal>);
+    return;
+  }
   await updateDoc(doc(db, 'goals', goalId), updates);
 }
 
 export async function deleteGoal(goalId: string): Promise<void> {
+  if (isE2EMode) {
+    e2eDeleteGoal(goalId);
+    return;
+  }
   await deleteDoc(doc(db, 'goals', goalId));
 }
 
 export async function deleteGoalWithDeposits(goalId: string): Promise<void> {
+  if (isE2EMode) {
+    e2eDeleteGoal(goalId);
+    return;
+  }
   const batch = writeBatch(db);
 
   const depositsQuery = query(collection(db, 'deposits'), where('goalId', '==', goalId));
@@ -96,6 +127,9 @@ export async function deleteGoalWithDeposits(goalId: string): Promise<void> {
 }
 
 export function subscribeGoals(userId: string, cb: (goals: Goal[]) => void): () => void {
+  if (isE2EMode) {
+    return e2eGoalsSubscribe(userId, cb);
+  }
   const q = query(collection(db, 'goals'), where('userId', '==', userId));
   return onSnapshot(q, (snap) => {
     cb(snap.docs.map(mapGoal));
@@ -103,6 +137,9 @@ export function subscribeGoals(userId: string, cb: (goals: Goal[]) => void): () 
 }
 
 export async function getUserGoals(userId: string): Promise<Goal[]> {
+  if (isE2EMode) {
+    return e2eGetGoals(userId);
+  }
   const q = query(collection(db, 'goals'), where('userId', '==', userId));
   const snap = await getDocs(q);
   return snap.docs.map(mapGoal);

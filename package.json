@@ -9,9 +9,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "web:e2e": "cross-env EXPO_PUBLIC_E2E_MODE=true expo start --web --port 3000",
     "test:e2e": "cucumber-js --config cucumber.js",
     "test:e2e:headed": "cross-env HEADLESS=false cucumber-js --config cucumber.js",
-    "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html"
+    "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html",
+    "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",

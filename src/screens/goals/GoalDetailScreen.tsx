@@ -134,6 +134,7 @@ export default function GoalDetailScreen() {
               value={depositQuery}
               onChangeText={setDepositQuery}
               placeholder="Search by amount, note, or date"
+              accessibilityLabel="deposit-search"
             />
           )}
 

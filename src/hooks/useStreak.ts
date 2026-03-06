@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { isE2EMode } from '../config/runtime';
+import { e2eStreakSubscribe } from '../services/e2eStore';
 
 export interface UserStats {
   currentStreak: number;
@@ -19,6 +21,9 @@ export function useStreak(userId: string | null) {
 
   useEffect(() => {
     if (!userId) return;
+    if (isE2EMode) {
+      return e2eStreakSubscribe((next) => setStats(next));
+    }
     const unsub = onSnapshot(doc(db, 'userStats', userId), (snap) => {
       if (snap.exists()) {
         const d = snap.data();
