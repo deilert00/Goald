@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
 import { View, ActivityIndicator } from 'react-native';
+import LandingScreen from '../screens/auth/LandingScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import AppTabs from './AppTabs';
@@ -13,6 +14,7 @@ import EditGoalScreen from '../screens/goals/EditGoalScreen';
 import CelebrationScreen from '../screens/CelebrationScreen';
 
 export type RootStackParamList = {
+  Landing: undefined;
   Login: undefined;
   Register: undefined;
   AppTabs: undefined;
@@ -70,6 +72,7 @@ export default function AppNavigator() {
           </>
         ) : (
           <>
+            <Stack.Screen name="Landing" component={LandingScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </>

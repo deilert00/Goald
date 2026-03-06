@@ -64,7 +64,9 @@ export default function RegisterScreen({ navigation }: Props) {
       />
 
       <TouchableOpacity style={styles.btn} onPress={handleRegister} disabled={loading}>
-        <Text style={styles.btnText}>{loading ? 'Creating account…' : 'Create Account'}</Text>
+        <Text style={styles.btnText} accessibilityLabel="register-submit">
+          {loading ? 'Creating account…' : 'Create Account'}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.goBack()}>
