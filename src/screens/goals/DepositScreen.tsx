@@ -78,8 +78,8 @@ export default function DepositScreen() {
 
       const newTotalDeposits = ((stats.totalDeposits as number) ?? 0) + 1;
       const isCompleted = newBalance >= goal.targetAmount;
-      const wasHalfway = goal.currentBalance / goal.targetAmount < 0.5;
-      const isNowHalfway = newBalance / goal.targetAmount >= 0.5;
+      const wasBelowHalfway = goal.currentBalance / goal.targetAmount < 0.5;
+      const isNowAtOrAboveHalfway = newBalance / goal.targetAmount >= 0.5;
 
       const goalCount = goals.length;
 
@@ -87,7 +87,7 @@ export default function DepositScreen() {
         totalDeposits: newTotalDeposits,
         currentStreak: newStreak,
         goalCount,
-        hasHalfway: wasHalfway && isNowHalfway,
+        hasHalfway: wasBelowHalfway && isNowAtOrAboveHalfway,
         hasCompleted: isCompleted,
         existingBadges: (stats.badges as string[]) ?? [],
       });
