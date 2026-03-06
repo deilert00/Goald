@@ -86,6 +86,7 @@ export default function DashboardScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.controlsRow}
       >
+        <Text style={styles.controlsLabel}>Filter:</Text>
         <TouchableOpacity
           style={[styles.chip, statusFilter === 'all' && styles.chipActive]}
           onPress={() => setStatusFilter('all')}
@@ -113,6 +114,9 @@ export default function DashboardScreen() {
             Completed
           </Text>
         </TouchableOpacity>
+
+        <View style={styles.controlsDivider} />
+        <Text style={styles.controlsLabel}>Sort:</Text>
 
         <TouchableOpacity
           style={[styles.chip, sortBy === 'created' && styles.chipActive]}
@@ -145,8 +149,22 @@ export default function DashboardScreen() {
         <ActivityIndicator style={{ flex: 1 }} size="large" color="#4CAF50" />
       ) : filteredGoals.length === 0 ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyEmoji}>🌱</Text>
-          <Text style={styles.emptyText}>No goals match this filter.</Text>
+          {goals.length === 0 ? (
+            <>
+              <Text style={styles.emptyEmoji}>🌱</Text>
+              <Text style={styles.emptyTitle}>No goals yet</Text>
+              <Text style={styles.emptyText}>Start your financial journey by creating your first goal.</Text>
+              <TouchableOpacity style={styles.emptyBtn} onPress={() => navigation.navigate('CreateGoal')}>
+                <Text style={styles.emptyBtnText}>Create Your First Goal</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <Text style={styles.emptyEmoji}>🔍</Text>
+              <Text style={styles.emptyTitle}>No goals match this filter.</Text>
+              <Text style={styles.emptyText}>Try changing the filter or sort options.</Text>
+            </>
+          )}
         </View>
       ) : (
         <FlatList
@@ -197,6 +215,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 6,
     gap: 8,
+    alignItems: 'center',
+  },
+  controlsLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#888',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  controlsDivider: {
+    width: 1,
+    height: 20,
+    backgroundColor: '#D2DAD3',
+    marginHorizontal: 4,
   },
   chip: {
     borderWidth: 1,
@@ -213,9 +245,17 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 12, color: '#555', fontWeight: '600' },
   chipTextActive: { color: '#2E7D32' },
   list: { padding: 16 },
-  empty: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  empty: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
   emptyEmoji: { fontSize: 64, marginBottom: 16 },
-  emptyText: { fontSize: 16, color: '#666', textAlign: 'center' },
+  emptyTitle: { fontSize: 20, fontWeight: '700', color: '#333', textAlign: 'center', marginBottom: 8 },
+  emptyText: { fontSize: 15, color: '#666', textAlign: 'center', lineHeight: 22, marginBottom: 24 },
+  emptyBtn: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 10,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+  },
+  emptyBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   fab: {
     position: 'absolute',
     bottom: 90,

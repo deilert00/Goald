@@ -85,30 +85,41 @@ export default function GoalDetailScreen() {
           style={styles.editBtn}
           onPress={() => navigation.navigate('EditGoal', { goalId })}
         >
-          <Text style={styles.editBtnText}>Edit Goal</Text>
+          <Text style={styles.editBtnText}>✏️ Edit Goal</Text>
         </TouchableOpacity>
 
         <MilestoneAnimation progress={progress} theme={goal.visualTheme} />
 
-        <ProgressBar progress={progress} height={16} />
-        <Text style={styles.balanceText}>
-          ${goal.currentBalance.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
-        </Text>
+        <View style={styles.progressCard}>
+          <ProgressBar progress={progress} height={20} />
+          <Text style={styles.balanceText}>
+            ${goal.currentBalance.toFixed(2)}{' '}
+            <Text style={styles.balanceOf}>of</Text>{' '}
+            ${goal.targetAmount.toFixed(2)}
+          </Text>
+          <Text style={styles.remainingText}>
+            ${Math.max(goal.targetAmount - goal.currentBalance, 0).toFixed(2)} remaining
+          </Text>
+        </View>
 
-        <View style={styles.statsRow}>
+        <View style={styles.statsCard}>
           <View style={styles.stat}>
             <Text style={styles.statValue}>${goal.monthlyContribution}/mo</Text>
             <Text style={styles.statLabel}>Contribution</Text>
           </View>
+          <View style={styles.statDivider} />
           <View style={styles.stat}>
             <Text style={styles.statValue}>{goal.annualInterestRate}%</Text>
             <Text style={styles.statLabel}>Annual Rate</Text>
           </View>
           {estimatedMonths !== null && isFinite(estimatedMonths) && estimatedMonths > 0 && (
-            <View style={styles.stat}>
-              <Text style={styles.statValue}>{estimatedMonths}mo</Text>
-              <Text style={styles.statLabel}>To complete</Text>
-            </View>
+            <>
+              <View style={styles.statDivider} />
+              <View style={styles.stat}>
+                <Text style={styles.statValue}>{estimatedMonths}mo</Text>
+                <Text style={styles.statLabel}>To complete</Text>
+              </View>
+            </>
           )}
         </View>
 
@@ -133,13 +144,16 @@ export default function GoalDetailScreen() {
               style={styles.searchInput}
               value={depositQuery}
               onChangeText={setDepositQuery}
-              placeholder="Search by amount, note, or date"
+              placeholder="🔍  Search by amount, note, or date"
               accessibilityLabel="deposit-search"
             />
           )}
 
           {filteredDeposits.length === 0 ? (
-            <Text style={styles.empty}>No deposits yet</Text>
+            <View style={styles.emptyDeposits}>
+              <Text style={styles.emptyDepositsEmoji}>💸</Text>
+              <Text style={styles.empty}>No deposits yet — make your first one!</Text>
+            </View>
           ) : (
             filteredDeposits.map((d) => (
                 <View key={d.id} style={styles.depositRow}>
@@ -192,12 +206,33 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 13,
   },
-  balanceText: { textAlign: 'center', fontSize: 16, color: '#555', marginTop: 8, marginBottom: 16 },
-  statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 16 },
-  stat: { alignItems: 'center' },
-  statValue: { fontSize: 18, fontWeight: '700', color: '#1A1A2E' },
-  statLabel: { fontSize: 12, color: '#888', marginTop: 2 },
-  section: { marginTop: 24 },
+  progressCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E8F5E9',
+  },
+  balanceText: { textAlign: 'center', fontSize: 18, fontWeight: '700', color: '#1A1A2E', marginTop: 10 },
+  balanceOf: { fontWeight: '400', color: '#888' },
+  remainingText: { textAlign: 'center', fontSize: 13, color: '#E65100', marginTop: 4, fontWeight: '600' },
+  statsCard: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E8F5E9',
+    padding: 16,
+    marginBottom: 12,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  stat: { alignItems: 'center', flex: 1 },
+  statDivider: { width: 1, height: 36, backgroundColor: '#E8F5E9' },
+  statValue: { fontSize: 16, fontWeight: '700', color: '#1A1A2E' },
+  statLabel: { fontSize: 11, color: '#888', marginTop: 2 },
+  section: { marginTop: 20 },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: '#333', marginBottom: 10 },
   searchInput: {
     backgroundColor: '#fff',
@@ -218,17 +253,20 @@ const styles = StyleSheet.create({
   },
   projMonth: { fontSize: 11, color: '#666' },
   projBal: { fontSize: 13, fontWeight: '600', color: '#2E7D32' },
-  empty: { color: '#999', fontStyle: 'italic' },
+  emptyDeposits: { alignItems: 'center', paddingVertical: 16 },
+  emptyDepositsEmoji: { fontSize: 36, marginBottom: 8 },
+  empty: { color: '#999', fontStyle: 'italic', textAlign: 'center' },
   depositRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#EEE',
+    alignItems: 'flex-start',
   },
   depositAmount: { fontSize: 16, fontWeight: '600', color: '#4CAF50' },
   depositNote: { fontSize: 12, color: '#666', marginTop: 2, maxWidth: 220 },
-  depositDate: { fontSize: 14, color: '#888' },
+  depositDate: { fontSize: 13, color: '#888' },
   depositBtn: {
     backgroundColor: '#4CAF50',
     borderRadius: 10,
