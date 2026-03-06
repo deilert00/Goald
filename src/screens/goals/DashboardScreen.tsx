@@ -180,7 +180,11 @@ export default function DashboardScreen() {
         />
       )}
 
-      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('CreateGoal')}>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate('CreateGoal')}
+        accessibilityLabel="dashboard-create-goal"
+      >
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>

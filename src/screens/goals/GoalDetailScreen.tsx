@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   SafeAreaView,
   TextInput,
 } from 'react-native';
@@ -17,6 +16,8 @@ import { useAuth } from '../../hooks/useAuth';
 import ProgressBar from '../../components/ProgressBar';
 import MilestoneAnimation from '../../components/MilestoneAnimation';
 import { projectGrowth, estimateCompletionMonths } from '../../utils/compoundInterest';
+import SidebarNav from '../../components/SidebarNav';
+import AppButton from '../../components/AppButton';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'GoalDetail'>;
@@ -79,10 +80,17 @@ export default function GoalDetailScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
+        <SidebarNav
+          onDashboard={() => navigation.navigate('AppTabs', { screen: 'Dashboard' })}
+          onBadges={() => navigation.navigate('AppTabs', { screen: 'Badges' })}
+          onCreateGoal={() => navigation.navigate('CreateGoal')}
+        />
+
         <Text style={styles.title}>{goal.name}</Text>
 
-        <TouchableOpacity
-          style={styles.editBtn}
+        <AppButton
+          label="Edit Goal"
+          variant="secondary"
           onPress={() => navigation.navigate('EditGoal', { goalId })}
         >
           <Text style={styles.editBtnText}>✏️ Edit Goal</Text>
@@ -169,12 +177,12 @@ export default function GoalDetailScreen() {
           )}
         </View>
 
-        <TouchableOpacity
-          style={styles.depositBtn}
+        <AppButton
+          label="+ Add Deposit"
           onPress={() => navigation.navigate('Deposit', { goalId })}
-        >
-          <Text style={styles.depositBtnText}>+ Add Deposit</Text>
-        </TouchableOpacity>
+          style={styles.depositBtn}
+          accessibilityLabel="goal-add-deposit"
+        />
       </ScrollView>
     </SafeAreaView>
   );

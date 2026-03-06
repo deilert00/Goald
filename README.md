@@ -230,3 +230,8 @@ Note:
 - Keep selectors and user-facing labels stable for E2E reliability.
 - Add new behavior specs under `features/` when adding user-visible flows.
 - Prefer deterministic E2E mode for CI and reproducibility.
+
+## UX Standards
+
+- Product UX requirements and test protocol:
+  - `docs/UX_REQUIREMENTS_AND_TEST_PLAN.md`
