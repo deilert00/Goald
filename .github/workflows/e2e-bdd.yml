@@ -26,6 +26,8 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build Expo web app
+        env:
+          EXPO_PUBLIC_E2E_MODE: "true"
         run: npx expo export --platform web
 
       - name: Start web server
