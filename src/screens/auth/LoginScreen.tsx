@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }: Props) {
       />
 
       <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.btnText}>{loading ? 'Logging in…' : 'Log In'}</Text>
+        <Text style={styles.btnText} accessibilityLabel="login-submit">{loading ? 'Logging in…' : 'Log In'}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>

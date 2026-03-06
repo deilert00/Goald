@@ -25,6 +25,8 @@ export const e2eUser = {
   email: 'e2e@goald.local',
 } as User;
 
+let currentUser: User | null = null;
+
 let goals: Goal[] = [
   {
     id: 'goal-e2e-1',
@@ -103,16 +105,18 @@ function notifyStats() {
 
 export function e2eAuthSubscribe(cb: (user: User | null) => void): () => void {
   authSubs.add(cb);
-  cb(e2eUser);
+  cb(currentUser);
   return () => authSubs.delete(cb);
 }
 
 export function e2eAuthLogout() {
-  notifyAuth(null);
+  currentUser = null;
+  notifyAuth(currentUser);
 }
 
 export function e2eAuthLogin() {
-  notifyAuth(e2eUser);
+  currentUser = e2eUser;
+  notifyAuth(currentUser);
 }
 
 export function e2eGoalsSubscribe(userId: string, cb: (rows: Goal[]) => void): () => void {

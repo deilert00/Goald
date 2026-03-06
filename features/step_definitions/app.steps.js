@@ -8,7 +8,7 @@ async function textVisible(page, text) {
 
 Given("I open the app entry page", async function () {
   await this.page.goto(this.baseUrl, { waitUntil: "domcontentloaded" });
-  await this.page.getByText("My Goals", { exact: false }).first().waitFor({ timeout: 15000 });
+  await this.page.getByText("Visual Compounding", { exact: false }).first().waitFor({ timeout: 15000 });
 });
 
 Then("I should see text {string}", async function (text) {
@@ -28,6 +28,20 @@ When("I tap text {string}", async function (text) {
   const btn = this.page.getByText(text, { exact: false }).first();
   await btn.waitFor({ state: "visible", timeout: 5000 });
   await btn.click();
+});
+
+When("I tap element with label {string}", async function (label) {
+  const element = this.page.getByLabel(label).first();
+  await element.waitFor({ state: "visible", timeout: 10000 });
+  await element.click();
+});
+
+Given("I log in from landing", async function () {
+  await this.page.getByLabel("landing-login-btn").first().click();
+  await this.page.getByPlaceholder("Email").first().fill("e2e-login@goald.local");
+  await this.page.getByPlaceholder("Password").first().fill("secret123");
+  await this.page.getByLabel("login-submit").first().click();
+  await this.page.getByText("My Goals", { exact: false }).first().waitFor({ timeout: 10000 });
 });
 
 Then("I should see dashboard filter controls", async function () {
