@@ -31,7 +31,7 @@ export default function GoalCard({ goal, onPress }: Props) {
         <Text style={styles.sub}>${goal.currentBalance.toFixed(2)} saved</Text>
         <Text style={styles.sub}>Target: ${goal.targetAmount.toFixed(2)}</Text>
       </View>
-      <MilestoneAnimation progress={progress} />
+      <MilestoneAnimation progress={progress} theme={goal.visualTheme} showLabel={false} />
     </TouchableOpacity>
   );
 }

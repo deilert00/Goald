@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  TextInput,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,6 +28,7 @@ export default function GoalDetailScreen() {
   const { user } = useAuth();
   const { goals } = useGoals(user?.uid ?? null);
   const { deposits } = useDeposits(goalId);
+  const [depositQuery, setDepositQuery] = useState('');
 
   const goal = goals.find((g) => g.id === goalId);
 
@@ -47,6 +49,24 @@ export default function GoalDetailScreen() {
       goal.annualInterestRate
     );
   }, [goal]);
+
+  const filteredDeposits = useMemo(() => {
+    const q = depositQuery.trim().toLowerCase();
+    const sorted = deposits.slice().sort((a, b) => {
+      const at = a.date?.toMillis ? a.date.toMillis() : 0;
+      const bt = b.date?.toMillis ? b.date.toMillis() : 0;
+      return bt - at;
+    });
+
+    if (!q) return sorted;
+
+    return sorted.filter((d) => {
+      const amount = d.amount.toFixed(2).toLowerCase();
+      const note = (d.note ?? '').toLowerCase();
+      const dateLabel = d.date?.toDate ? d.date.toDate().toLocaleDateString().toLowerCase() : '';
+      return amount.includes(q) || note.includes(q) || dateLabel.includes(q);
+    });
+  }, [deposits, depositQuery]);
 
   if (!goal) {
     return (
@@ -108,15 +128,24 @@ export default function GoalDetailScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>💳 Deposit History ({deposits.length})</Text>
-          {deposits.length === 0 ? (
+          {deposits.length > 0 && (
+            <TextInput
+              style={styles.searchInput}
+              value={depositQuery}
+              onChangeText={setDepositQuery}
+              placeholder="Search by amount, note, or date"
+            />
+          )}
+
+          {filteredDeposits.length === 0 ? (
             <Text style={styles.empty}>No deposits yet</Text>
           ) : (
-            deposits
-              .slice()
-              .reverse()
-              .map((d) => (
+            filteredDeposits.map((d) => (
                 <View key={d.id} style={styles.depositRow}>
-                  <Text style={styles.depositAmount}>+${d.amount.toFixed(2)}</Text>
+                  <View>
+                    <Text style={styles.depositAmount}>+${d.amount.toFixed(2)}</Text>
+                    {!!d.note && <Text style={styles.depositNote}>{d.note}</Text>}
+                  </View>
                   <Text style={styles.depositDate}>
                     {d.date?.toDate ? d.date.toDate().toLocaleDateString() : 'Recent'}
                   </Text>
@@ -169,6 +198,15 @@ const styles = StyleSheet.create({
   statLabel: { fontSize: 12, color: '#888', marginTop: 2 },
   section: { marginTop: 24 },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: '#333', marginBottom: 10 },
+  searchInput: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 10,
+  },
   projItem: {
     alignItems: 'center',
     marginRight: 12,
@@ -188,6 +226,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EEE',
   },
   depositAmount: { fontSize: 16, fontWeight: '600', color: '#4CAF50' },
+  depositNote: { fontSize: 12, color: '#666', marginTop: 2, maxWidth: 220 },
   depositDate: { fontSize: 14, color: '#888' },
   depositBtn: {
     backgroundColor: '#4CAF50',

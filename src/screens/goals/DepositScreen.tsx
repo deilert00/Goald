@@ -31,6 +31,7 @@ export default function DepositScreen() {
   const { goals } = useGoals(user?.uid ?? null);
 
   const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
 
   const goal = goals.find((g) => g.id === goalId);
@@ -45,7 +46,7 @@ export default function DepositScreen() {
 
     setLoading(true);
     try {
-      await addDeposit(goalId, user.uid, depositAmount);
+      await addDeposit(goalId, user.uid, depositAmount, note);
 
       const newBalance = goal.currentBalance + depositAmount;
       await updateGoalBalance(goalId, newBalance);
@@ -134,6 +135,15 @@ export default function DepositScreen() {
         autoFocus
       />
 
+      <Text style={styles.label}>Note (optional)</Text>
+      <TextInput
+        style={[styles.input, styles.noteInput]}
+        value={note}
+        onChangeText={setNote}
+        placeholder="e.g. Freelance payout"
+        maxLength={120}
+      />
+
       <TouchableOpacity style={styles.btn} onPress={handleDeposit} disabled={loading}>
         <Text style={styles.btnText}>{loading ? 'Saving…' : 'Record Deposit'}</Text>
       </TouchableOpacity>
@@ -165,6 +175,11 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 24,
     textAlign: 'center',
+    marginBottom: 24,
+  },
+  noteInput: {
+    fontSize: 16,
+    textAlign: 'left',
     marginBottom: 24,
   },
   btn: { backgroundColor: '#4CAF50', borderRadius: 10, padding: 16, alignItems: 'center' },

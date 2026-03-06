@@ -17,17 +17,20 @@ export interface Deposit {
   userId: string;
   amount: number;
   date: Timestamp;
+  note?: string;
 }
 
 export async function addDeposit(
   goalId: string,
   userId: string,
-  amount: number
+  amount: number,
+  note?: string
 ): Promise<string> {
   const ref = await addDoc(collection(db, 'deposits'), {
     goalId,
     userId,
     amount,
+    ...(note ? { note: note.trim() } : {}),
     date: serverTimestamp(),
   });
   return ref.id;
