@@ -19,6 +19,10 @@ import { updateGoalBalance, markGoalCompleted } from '../../services/goalService
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { computeEarnedBadges, BadgeId } from '../../utils/badges';
+import {
+  sendMilestoneNotification,
+  sendGoalCompletedNotification,
+} from '../../services/notificationService';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -36,6 +40,13 @@ export default function DepositScreen() {
 
   const goal = goals.find((g) => g.id === goalId);
 
+  function getCrossedMilestones(previousProgress: number, nextProgress: number): number[] {
+    const milestones = [25, 50, 75];
+    return milestones.filter(
+      (m) => previousProgress < m / 100 && nextProgress >= m / 100
+    );
+  }
+
   async function handleDeposit() {
     const depositAmount = parseFloat(amount);
     if (!depositAmount || depositAmount <= 0) {
@@ -50,6 +61,10 @@ export default function DepositScreen() {
 
       const newBalance = goal.currentBalance + depositAmount;
       await updateGoalBalance(goalId, newBalance);
+
+      const previousProgress = goal.targetAmount > 0 ? goal.currentBalance / goal.targetAmount : 0;
+      const nextProgress = goal.targetAmount > 0 ? newBalance / goal.targetAmount : 0;
+      const crossedMilestones = getCrossedMilestones(previousProgress, nextProgress);
 
       // Update streak and stats
       const statsRef = doc(db, 'userStats', user.uid);
@@ -100,7 +115,14 @@ export default function DepositScreen() {
         badges: newBadges,
       });
 
+      await Promise.all(
+        crossedMilestones.map((milestone) =>
+          sendMilestoneNotification(user.uid, goalId, goal.name, milestone).catch(() => {})
+        )
+      );
+
       if (isCompleted && !goal.completedAt) {
+        await sendGoalCompletedNotification(user.uid, goalId, goal.name).catch(() => {});
         await markGoalCompleted(goalId);
         navigation.replace('Celebration', { goalId, goalName: goal.name });
       } else {
