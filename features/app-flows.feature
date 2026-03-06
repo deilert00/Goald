@@ -56,3 +56,15 @@ Feature: Visual compounding app core flows
     And I fill "e.g. Freelance payout" with "E2E test note"
     And I tap text "Record Deposit"
     Then I should see text "E2E test note"
+
+  Scenario: User creates a goal and returns via sidebar navigation
+    Given I open the app entry page
+    And I log in from landing
+    When I tap element with label "dashboard-create-goal"
+    And I fill "e.g. Emergency Fund" with "UX Flow Goal"
+    And I fill "10000" with "6000"
+    And I fill "500" with "400"
+    And I tap element with label "create-goal-submit"
+    Then I should see text "UX Flow Goal"
+    When I tap element with label "sidebar-dashboard"
+    Then I should see text "Portfolio Snapshot"

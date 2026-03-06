@@ -145,9 +145,16 @@ export default function DepositScreen() {
     >
       <Text style={styles.title}>Add Deposit</Text>
       {goal && (
-        <Text style={styles.goalName}>
-          {goal.name} — ${goal.currentBalance.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
-        </Text>
+        <View style={styles.goalSummary}>
+          <Text style={styles.goalName}>{goal.name}</Text>
+          <View style={styles.goalAmounts}>
+            <Text style={styles.goalBalance}>${goal.currentBalance.toFixed(2)} saved</Text>
+            <Text style={styles.goalSeparator}> · </Text>
+            <Text style={styles.goalRemaining}>
+              ${Math.max(goal.targetAmount - goal.currentBalance, 0).toFixed(2)} remaining
+            </Text>
+          </View>
+        </View>
       )}
 
       <Text style={styles.label}>Deposit Amount ($)</Text>
@@ -159,6 +166,12 @@ export default function DepositScreen() {
         keyboardType="numeric"
         autoFocus
       />
+      {goal && !isNaN(parseFloat(amount)) && parseFloat(amount) > 0 && (
+        <Text style={styles.depositHint}>
+          {Math.min((goal.currentBalance + parseFloat(amount)) / goal.targetAmount * 100, 100).toFixed(1)}% of goal after deposit
+          {goal.currentBalance + parseFloat(amount) >= goal.targetAmount ? ' 🎉' : ''}
+        </Text>
+      )}
 
       <Text style={styles.label}>Note (optional)</Text>
       <TextInput
@@ -168,6 +181,7 @@ export default function DepositScreen() {
         placeholder="e.g. Freelance payout"
         maxLength={120}
       />
+      <Text style={styles.charCount}>{note.length}/120</Text>
 
       <TouchableOpacity style={styles.btn} onPress={handleDeposit} disabled={loading}>
         <Text style={styles.btnText}>{loading ? 'Saving…' : 'Record Deposit'}</Text>
@@ -190,7 +204,15 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textAlign: 'center',
   },
-  goalName: { fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 32 },
+  goalSummary: {
+    alignItems: 'center',
+    marginBottom: 28,
+  },
+  goalName: { fontSize: 15, fontWeight: '700', color: '#2E7D32', textAlign: 'center' },
+  goalAmounts: { flexDirection: 'row', marginTop: 4 },
+  goalBalance: { fontSize: 13, color: '#555' },
+  goalSeparator: { fontSize: 13, color: '#999' },
+  goalRemaining: { fontSize: 13, color: '#E65100', fontWeight: '600' },
   label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 8 },
   input: {
     backgroundColor: '#fff',
@@ -200,12 +222,24 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 24,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 4,
+  },
+  depositHint: {
+    fontSize: 12,
+    color: '#2E7D32',
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: '600',
   },
   noteInput: {
     fontSize: 16,
     textAlign: 'left',
-    marginBottom: 24,
+  },
+  charCount: {
+    fontSize: 11,
+    color: '#999',
+    textAlign: 'right',
+    marginBottom: 20,
   },
   btn: { backgroundColor: '#4CAF50', borderRadius: 10, padding: 16, alignItems: 'center' },
   btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },

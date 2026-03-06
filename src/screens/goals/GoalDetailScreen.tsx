@@ -89,12 +89,21 @@ export default function GoalDetailScreen() {
         <Text style={styles.title}>{goal.name}</Text>
 
         <AppButton
+<<<<<<< copilot/fix-e2e-test-failures
           label="✏️ Edit Goal"
           variant="secondary"
           onPress={() => navigation.navigate('EditGoal', { goalId })}
           style={styles.editBtn}
           accessibilityLabel="goal-edit-btn"
         />
+=======
+          label="Edit Goal"
+          variant="secondary"
+          onPress={() => navigation.navigate('EditGoal', { goalId })}
+        >
+          <Text style={styles.editBtnText}>✏️ Edit Goal</Text>
+        </TouchableOpacity>
+>>>>>>> main
 
         <MilestoneAnimation progress={progress} theme={goal.visualTheme} />
 

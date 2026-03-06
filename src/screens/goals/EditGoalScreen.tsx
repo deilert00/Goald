@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
   Alert,
   ScrollView,
@@ -21,6 +20,8 @@ import {
   deleteGoalWithDeposits,
 } from '../../services/goalService';
 import { estimateCompletionMonths } from '../../utils/compoundInterest';
+import AppButton from '../../components/AppButton';
+import SidebarNav from '../../components/SidebarNav';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditGoal'>;
 
@@ -131,6 +132,12 @@ export default function EditGoalScreen({ navigation, route }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+        <SidebarNav
+          onDashboard={() => navigation.navigate('AppTabs', { screen: 'Dashboard' })}
+          onBadges={() => navigation.navigate('AppTabs', { screen: 'Badges' })}
+          onCreateGoal={() => navigation.navigate('CreateGoal')}
+        />
+
         <ThemeSelector selectedTheme={visualTheme} onSelectTheme={setVisualTheme} />
 
         <Text style={styles.label}>Goal Name *</Text>
@@ -184,13 +191,22 @@ export default function EditGoalScreen({ navigation, route }: Props) {
           </View>
         )}
 
-        <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={loading}>
-          <Text style={styles.saveBtnText}>{loading ? 'Saving...' : 'Save Changes'}</Text>
-        </TouchableOpacity>
+        <AppButton
+          label="Save Changes"
+          loading={loading}
+          onPress={handleSave}
+          style={styles.saveBtn}
+          accessibilityLabel="edit-goal-save"
+        />
 
-        <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete} disabled={loading}>
-          <Text style={styles.deleteBtnText}>Delete Goal</Text>
-        </TouchableOpacity>
+        <AppButton
+          label="Delete Goal"
+          variant="danger"
+          disabled={loading}
+          onPress={handleDelete}
+          style={styles.deleteBtn}
+          accessibilityLabel="edit-goal-delete"
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -221,22 +237,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   projectionText: { color: '#2E7D32', fontSize: 14, fontWeight: '600' },
-  saveBtn: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 24,
-  },
-  saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  deleteBtn: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: '#d9534f',
-  },
-  deleteBtnText: { color: '#d9534f', fontSize: 16, fontWeight: '700' },
+  saveBtn: { marginTop: 24 },
+  deleteBtn: { marginTop: 12 },
 });

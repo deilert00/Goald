@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
   Alert,
   ScrollView,
@@ -19,6 +18,8 @@ import { estimateCompletionMonths } from '../../utils/compoundInterest';
 import { scheduleMonthlyReminder } from '../../services/notificationService';
 import { ThemeType } from '../../types/Theme';
 import ThemeSelector from '../../components/ThemeSelector';
+import AppButton from '../../components/AppButton';
+import SidebarNav from '../../components/SidebarNav';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -49,7 +50,7 @@ export default function CreateGoalScreen() {
 
     setLoading(true);
     try {
-      await createGoal(user.uid, {
+      const goalId = await createGoal(user.uid, {
         name: name.trim(),
         targetAmount: target,
         monthlyContribution: monthly,
@@ -58,7 +59,8 @@ export default function CreateGoalScreen() {
         ...(timelineMonths ? { timelineMonths: parseInt(timelineMonths) } : {}),
       });
       await scheduleMonthlyReminder(name.trim()).catch(() => {});
-      navigation.goBack();
+      Alert.alert('Goal created', 'Your goal was created successfully.');
+      navigation.replace('GoalDetail', { goalId });
     } catch (e: any) {
       Alert.alert('Error', e.message);
     } finally {
@@ -76,6 +78,11 @@ export default function CreateGoalScreen() {
         contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
+        <SidebarNav
+          onDashboard={() => navigation.navigate('AppTabs', { screen: 'Dashboard' })}
+          onBadges={() => navigation.navigate('AppTabs', { screen: 'Badges' })}
+        />
+
         <ThemeSelector 
           selectedTheme={visualTheme}
           onSelectTheme={setVisualTheme}
@@ -134,9 +141,13 @@ export default function CreateGoalScreen() {
           </View>
         )}
 
-        <TouchableOpacity style={styles.btn} onPress={handleCreate} disabled={loading}>
-          <Text style={styles.btnText}>{loading ? 'Creating…' : 'Create Goal'}</Text>
-        </TouchableOpacity>
+        <AppButton
+          label="Create Goal"
+          loading={loading}
+          onPress={handleCreate}
+          style={styles.btn}
+          accessibilityLabel="create-goal-submit"
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -160,12 +171,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   projectionText: { color: '#2E7D32', fontSize: 14, fontWeight: '600' },
-  btn: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 24,
-  },
-  btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  btn: { marginTop: 24 },
 });
