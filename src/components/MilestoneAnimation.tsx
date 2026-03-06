@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { ThemeType, getTheme, calculateProgressStage } from '../types/Theme';
 
@@ -27,7 +27,6 @@ export default function MilestoneAnimation({
   const anim = useRef(new Animated.Value(1)).current;
   const translateY = useRef(new Animated.Value(0)).current;
   const rotation = useRef(new Animated.Value(0)).current;
-  const [useLottie, setUseLottie] = useState(false);
 
   const progressPercent = progress * 100;
   const progressStage = calculateProgressStage(progressPercent);
@@ -38,8 +37,12 @@ export default function MilestoneAnimation({
   // Future: const lottieSource = require(`../../assets/animations/${theme}/stage-${progressStage}.json`);
 
   useEffect(() => {
+    anim.setValue(1);
+    translateY.setValue(0);
+    rotation.setValue(0);
+
     if (progress >= 1) {
-        // Completed: Continuous rotation
+      // Completed: Continuous rotation
       Animated.loop(
         Animated.timing(rotation, { toValue: 1, duration: 1000, useNativeDriver: true })
       ).start();
@@ -50,23 +53,23 @@ export default function MilestoneAnimation({
           Animated.timing(translateY, { toValue: -10, duration: 400, useNativeDriver: true }),
           Animated.timing(translateY, { toValue: 0, duration: 400, useNativeDriver: true }),
         ])
-          } else if (progressStage >= 4) {
-            // Mid progress: Gentle bounce with rotation
-            Animated.loop(
-              Animated.parallel([
-                Animated.sequence([
-                  Animated.timing(translateY, { toValue: -5, duration: 500, useNativeDriver: true }),
-                  Animated.timing(translateY, { toValue: 0, duration: 500, useNativeDriver: true }),
-                ]),
-                Animated.sequence([
-                  Animated.timing(rotation, { toValue: 0.05, duration: 500, useNativeDriver: true }),
-                  Animated.timing(rotation, { toValue: 0, duration: 500, useNativeDriver: true }),
-                ]),
-              ])
-            ).start();
+      ).start();
+    } else if (progressStage >= 4) {
+      // Mid progress: Gentle bounce with slight rotation
+      Animated.loop(
+        Animated.parallel([
+          Animated.sequence([
+            Animated.timing(translateY, { toValue: -5, duration: 500, useNativeDriver: true }),
+            Animated.timing(translateY, { toValue: 0, duration: 500, useNativeDriver: true }),
+          ]),
+          Animated.sequence([
+            Animated.timing(rotation, { toValue: 0.05, duration: 500, useNativeDriver: true }),
+            Animated.timing(rotation, { toValue: 0, duration: 500, useNativeDriver: true }),
+          ]),
+        ])
       ).start();
     } else {
-        // Low progress: Breathing animation
+      // Low progress: Breathing animation
       Animated.loop(
         Animated.sequence([
           Animated.timing(anim, { toValue: 1.2, duration: 600, useNativeDriver: true }),
@@ -81,15 +84,7 @@ export default function MilestoneAnimation({
 
   return (
     <View style={styles.container}>
-            {/* TODO: Add Lottie animation when assets are available
-            {useLottie ? (
-              <LottieView
-                source={lottieSource}
-                autoPlay
-                loop={false}
-                style={styles.lottie}
-              />
-            ) : ( */}
+      {/* TODO: Add Lottie animation when assets are available */}
       <Animated.Text
         style={[
           styles.emoji,
@@ -104,7 +99,6 @@ export default function MilestoneAnimation({
       >
         {stage.emoji}
       </Animated.Text>
-      {/* )} */}
       
       {showLabel && (
         <View style={styles.labelContainer}>
