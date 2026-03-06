@@ -18,6 +18,7 @@ type Props = { navigation: NativeStackNavigationProp<RootStackParamList, 'Regist
 export default function RegisterScreen({ navigation }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleRegister() {
@@ -54,14 +55,29 @@ export default function RegisterScreen({ navigation }: Props) {
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
+        accessibilityLabel="register-email"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password (min 6 characters)"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.passwordInput}
+          placeholder="Password (min 6 characters)"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          accessibilityLabel="register-password"
+        />
+        <TouchableOpacity
+          style={styles.eyeBtn}
+          onPress={() => setShowPassword((v) => !v)}
+          accessibilityLabel={showPassword ? 'hide-password' : 'show-password'}
+        >
+          <Text style={styles.eyeText}>{showPassword ? '🙈' : '👁️'}</Text>
+        </TouchableOpacity>
+      </View>
+      {password.length > 0 && password.length < 6 && (
+        <Text style={styles.passwordHint}>Password must have at least 6 characters ({password.length}/6)</Text>
+      )}
 
       <TouchableOpacity style={styles.btn} onPress={handleRegister} disabled={loading}>
         <Text style={styles.btnText} accessibilityLabel="register-submit">
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   logo: { fontSize: 48, textAlign: 'center', marginBottom: 4 },
-  tagline: { fontSize: 16, textAlign: 'center', color: '#666', marginBottom: 40 },
+  tagline: { fontSize: 16, textAlign: 'center', color: '#555', marginBottom: 40 },
   input: {
     backgroundColor: '#fff',
     borderWidth: 1,
@@ -93,6 +109,31 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 14,
     fontSize: 16,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#DDD',
+    borderRadius: 10,
+    marginBottom: 6,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+  },
+  eyeBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  eyeText: { fontSize: 18 },
+  passwordHint: {
+    fontSize: 12,
+    color: '#E65100',
+    marginBottom: 12,
+    marginLeft: 4,
   },
   btn: {
     backgroundColor: '#4CAF50',
@@ -103,5 +144,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  link: { textAlign: 'center', color: '#4CAF50', fontSize: 14 },
+  link: { textAlign: 'center', color: '#2E7D32', fontSize: 14, fontWeight: '600' },
 });
