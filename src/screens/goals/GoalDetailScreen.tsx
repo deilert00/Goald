@@ -61,7 +61,7 @@ export default function GoalDetailScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>{goal.name}</Text>
 
-        <MilestoneAnimation progress={progress} />
+        <MilestoneAnimation progress={progress} theme={goal.visualTheme} />
 
         <ProgressBar progress={progress} height={16} />
         <Text style={styles.balanceText}>

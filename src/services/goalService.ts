@@ -14,6 +14,8 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
+import { ThemeType } from '../types/Theme';
+
 export interface Goal {
   id: string;
   userId: string;
@@ -22,6 +24,7 @@ export interface Goal {
   monthlyContribution: number;
   annualInterestRate: number;
   timelineMonths?: number;
+  visualTheme: ThemeType;
   createdAt: Timestamp;
   completedAt?: Timestamp;
   currentBalance: number;
@@ -37,6 +40,7 @@ function mapGoal(snap: QueryDocumentSnapshot): Goal {
     monthlyContribution: d.monthlyContribution,
     annualInterestRate: d.annualInterestRate,
     timelineMonths: d.timelineMonths,
+      visualTheme: d.visualTheme ?? 'tree',
     createdAt: d.createdAt,
     completedAt: d.completedAt,
     currentBalance: d.currentBalance ?? 0,
@@ -62,6 +66,13 @@ export async function updateGoalBalance(goalId: string, newBalance: number): Pro
 
 export async function markGoalCompleted(goalId: string): Promise<void> {
   await updateDoc(doc(db, 'goals', goalId), { completedAt: serverTimestamp() });
+export async function updateGoal(
+  goalId: string,
+  updates: Partial<Pick<Goal, 'name' | 'monthlyContribution' | 'annualInterestRate' | 'visualTheme' | 'timelineMonths'>>
+): Promise<void> {
+  await updateDoc(doc(db, 'goals', goalId), updates);
+}
+
 }
 
 export async function deleteGoal(goalId: string): Promise<void> {

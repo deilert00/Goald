@@ -17,6 +17,8 @@ import { useAuth } from '../../hooks/useAuth';
 import { createGoal } from '../../services/goalService';
 import { estimateCompletionMonths } from '../../utils/compoundInterest';
 import { scheduleMonthlyReminder } from '../../services/notificationService';
+import { ThemeType } from '../../types/Theme';
+import ThemeSelector from '../../components/ThemeSelector';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -29,6 +31,7 @@ export default function CreateGoalScreen() {
   const [monthlyContribution, setMonthlyContribution] = useState('');
   const [annualInterestRate, setAnnualInterestRate] = useState('');
   const [timelineMonths, setTimelineMonths] = useState('');
+    const [visualTheme, setVisualTheme] = useState<ThemeType>('tree');
   const [loading, setLoading] = useState(false);
 
   const target = parseFloat(targetAmount) || 0;
@@ -51,6 +54,7 @@ export default function CreateGoalScreen() {
         targetAmount: target,
         monthlyContribution: monthly,
         annualInterestRate: rate,
+          visualTheme,
         ...(timelineMonths ? { timelineMonths: parseInt(timelineMonths) } : {}),
       });
       await scheduleMonthlyReminder(name.trim()).catch(() => {});
@@ -67,7 +71,16 @@ export default function CreateGoalScreen() {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+      <ScrollView 
+        style={styles.container} 
+        contentContainerStyle={{ paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <ThemeSelector 
+          selectedTheme={visualTheme}
+          onSelectTheme={setVisualTheme}
+        />
+
         <Text style={styles.label}>Goal Name *</Text>
         <TextInput
           style={styles.input}
