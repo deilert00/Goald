@@ -18,7 +18,7 @@
     "expo-status-bar": "~2.0.0",
     "react": "18.3.1",
     "react-native": "0.76.5",
-    "firebase": "10.14.1",
+    "firebase": "^11.10.0",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
@@ -32,8 +32,12 @@
   "devDependencies": {
     "@types/react": "~18.3.12",
     "typescript": "~5.3.3",
-    "@cucumber/cucumber": "^11.2.0",
+    "@cucumber/cucumber": "^12.7.0",
     "cross-env": "^7.0.3",
     "playwright": "^1.52.0"
+  },
+  "overrides": {
+    "tar": ">=7.5.10",
+    "@xmldom/xmldom": ">=0.8.0"
   }
 }
