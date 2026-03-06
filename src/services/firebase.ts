@@ -13,6 +13,12 @@ const firebaseConfig = {
   appId: 'YOUR_APP_ID',
 };
 
+export const isFirebaseConfigured =
+  firebaseConfig.apiKey !== 'YOUR_API_KEY' &&
+  firebaseConfig.authDomain !== 'YOUR_AUTH_DOMAIN' &&
+  firebaseConfig.projectId !== 'YOUR_PROJECT_ID' &&
+  firebaseConfig.appId !== 'YOUR_APP_ID';
+
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);

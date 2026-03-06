@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
-import { login } from '../../services/authService';
+import { login, resetPassword } from '../../services/authService';
 
 type Props = { navigation: NativeStackNavigationProp<RootStackParamList, 'Login'> };
 
@@ -33,6 +33,20 @@ export default function LoginScreen({ navigation }: Props) {
       Alert.alert('Login failed', e.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleForgotPassword() {
+    const emailToReset = email.trim();
+    if (!emailToReset) {
+      Alert.alert('Reset password', 'Enter your email first, then tap Forgot password again.');
+      return;
+    }
+    try {
+      await resetPassword(emailToReset);
+      Alert.alert('Reset link sent', `If an account exists for ${emailToReset}, a reset email has been sent.`);
+    } catch (e: any) {
+      Alert.alert('Reset failed', e.message);
     }
   }
 
@@ -74,6 +88,10 @@ export default function LoginScreen({ navigation }: Props) {
 
       <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
         <Text style={styles.btnText} accessibilityLabel="login-submit">{loading ? 'Logging in…' : 'Log In'}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleForgotPassword}>
+        <Text style={styles.forgotLink}>Forgot password?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
@@ -129,5 +147,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   btnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  forgotLink: { textAlign: 'center', color: '#2E7D32', fontSize: 13, marginBottom: 12 },
   link: { textAlign: 'center', color: '#2E7D32', fontSize: 14, fontWeight: '600' },
 });
