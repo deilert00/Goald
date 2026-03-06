@@ -89,12 +89,14 @@ export default function DashboardScreen() {
         <TouchableOpacity
           style={[styles.chip, statusFilter === 'all' && styles.chipActive]}
           onPress={() => setStatusFilter('all')}
+          accessibilityLabel="filter-all"
         >
           <Text style={[styles.chipText, statusFilter === 'all' && styles.chipTextActive]}>All</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.chip, statusFilter === 'active' && styles.chipActive]}
           onPress={() => setStatusFilter('active')}
+          accessibilityLabel="filter-active"
         >
           <Text style={[styles.chipText, statusFilter === 'active' && styles.chipTextActive]}>
             Active
@@ -103,6 +105,7 @@ export default function DashboardScreen() {
         <TouchableOpacity
           style={[styles.chip, statusFilter === 'completed' && styles.chipActive]}
           onPress={() => setStatusFilter('completed')}
+          accessibilityLabel="filter-completed"
         >
           <Text
             style={[styles.chipText, statusFilter === 'completed' && styles.chipTextActive]}
@@ -114,6 +117,7 @@ export default function DashboardScreen() {
         <TouchableOpacity
           style={[styles.chip, sortBy === 'created' && styles.chipActive]}
           onPress={() => setSortBy('created')}
+          accessibilityLabel="sort-newest"
         >
           <Text style={[styles.chipText, sortBy === 'created' && styles.chipTextActive]}>
             Newest
@@ -122,6 +126,7 @@ export default function DashboardScreen() {
         <TouchableOpacity
           style={[styles.chip, sortBy === 'progress' && styles.chipActive]}
           onPress={() => setSortBy('progress')}
+          accessibilityLabel="sort-progress"
         >
           <Text style={[styles.chipText, sortBy === 'progress' && styles.chipTextActive]}>
             Progress
@@ -130,6 +135,7 @@ export default function DashboardScreen() {
         <TouchableOpacity
           style={[styles.chip, sortBy === 'target' && styles.chipActive]}
           onPress={() => setSortBy('target')}
+          accessibilityLabel="sort-target"
         >
           <Text style={[styles.chipText, sortBy === 'target' && styles.chipTextActive]}>Target</Text>
         </TouchableOpacity>

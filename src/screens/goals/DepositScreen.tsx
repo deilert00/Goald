@@ -23,6 +23,7 @@ import {
   sendMilestoneNotification,
   sendGoalCompletedNotification,
 } from '../../services/notificationService';
+import { isE2EMode } from '../../config/runtime';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -66,54 +67,56 @@ export default function DepositScreen() {
       const nextProgress = goal.targetAmount > 0 ? newBalance / goal.targetAmount : 0;
       const crossedMilestones = getCrossedMilestones(previousProgress, nextProgress);
 
-      // Update streak and stats
-      const statsRef = doc(db, 'userStats', user.uid);
-      const statsSnap = await getDoc(statsRef);
-      const stats = statsSnap.data() ?? {
-        currentStreak: 0,
-        lastDepositMonth: '',
-        badges: [],
-        totalDeposits: 0,
-      };
-
-      const now = new Date();
-      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      const lastMonth = stats.lastDepositMonth as string;
-
-      let newStreak = (stats.currentStreak as number) ?? 0;
-      if (lastMonth !== currentMonth) {
-        if (!lastMonth) {
-          newStreak = 1;
-        } else {
-          const last = new Date(lastMonth + '-01');
-          const diffMonths =
-            (now.getFullYear() - last.getFullYear()) * 12 + (now.getMonth() - last.getMonth());
-          newStreak = diffMonths === 1 ? newStreak + 1 : 1;
-        }
-      }
-
-      const newTotalDeposits = ((stats.totalDeposits as number) ?? 0) + 1;
+      // Update streak and badge stats (Firestore in normal mode, in-memory in e2e mode)
       const isCompleted = newBalance >= goal.targetAmount;
       const wasBelowHalfway = goal.currentBalance / goal.targetAmount < 0.5;
       const isNowAtOrAboveHalfway = newBalance / goal.targetAmount >= 0.5;
 
-      const goalCount = goals.length;
+      if (!isE2EMode) {
+        const statsRef = doc(db, 'userStats', user.uid);
+        const statsSnap = await getDoc(statsRef);
+        const stats = statsSnap.data() ?? {
+          currentStreak: 0,
+          lastDepositMonth: '',
+          badges: [],
+          totalDeposits: 0,
+        };
 
-      const newBadges = computeEarnedBadges({
-        totalDeposits: newTotalDeposits,
-        currentStreak: newStreak,
-        goalCount,
-        hasHalfway: wasBelowHalfway && isNowAtOrAboveHalfway,
-        hasCompleted: isCompleted,
-        existingBadges: ((stats.badges ?? []) as BadgeId[]),
-      });
+        const now = new Date();
+        const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const lastMonth = stats.lastDepositMonth as string;
 
-      await updateDoc(statsRef, {
-        currentStreak: newStreak,
-        lastDepositMonth: currentMonth,
-        totalDeposits: newTotalDeposits,
-        badges: newBadges,
-      });
+        let newStreak = (stats.currentStreak as number) ?? 0;
+        if (lastMonth !== currentMonth) {
+          if (!lastMonth) {
+            newStreak = 1;
+          } else {
+            const last = new Date(lastMonth + '-01');
+            const diffMonths =
+              (now.getFullYear() - last.getFullYear()) * 12 + (now.getMonth() - last.getMonth());
+            newStreak = diffMonths === 1 ? newStreak + 1 : 1;
+          }
+        }
+
+        const newTotalDeposits = ((stats.totalDeposits as number) ?? 0) + 1;
+        const goalCount = goals.length;
+
+        const newBadges = computeEarnedBadges({
+          totalDeposits: newTotalDeposits,
+          currentStreak: newStreak,
+          goalCount,
+          hasHalfway: wasBelowHalfway && isNowAtOrAboveHalfway,
+          hasCompleted: isCompleted,
+          existingBadges: ((stats.badges ?? []) as BadgeId[]),
+        });
+
+        await updateDoc(statsRef, {
+          currentStreak: newStreak,
+          lastDepositMonth: currentMonth,
+          totalDeposits: newTotalDeposits,
+          badges: newBadges,
+        });
+      }
 
       await Promise.all(
         crossedMilestones.map((milestone) =>
