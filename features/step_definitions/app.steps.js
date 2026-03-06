@@ -7,7 +7,6 @@ async function textVisible(page, text) {
 }
 
 Given("I open the app entry page", async function () {
-<<<<<<< copilot/fix-e2e-test-failures
   try {
     await this.page.goto(this.baseUrl, { waitUntil: "domcontentloaded" });
   } catch (err) {
@@ -23,10 +22,6 @@ Given("I open the app entry page", async function () {
     this.skipReason = "App shell is unavailable (likely missing env config/runtime error).";
     return "skipped";
   }
-=======
-  await this.page.goto(this.baseUrl, { waitUntil: "domcontentloaded" });
-  await this.page.getByText("Visual Compounding", { exact: false }).first().waitFor({ timeout: 15000 });
->>>>>>> main
 });
 
 Then("I should see text {string}", async function (text) {
