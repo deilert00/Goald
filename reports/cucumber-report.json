@@ -1,0 +1,1140 @@
+[
+  {
+    "description": "  To keep new product behavior safe during refactors\n  As a maintainer\n  I want smoke coverage for landing, account creation, login, and core goal interactions",
+    "elements": [
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;landing-page-shows-product-information-and-auth-actions",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Landing page shows product information and auth actions",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 85944273
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 873046511
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "I should see text \"Visual Compounding\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16860464
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I should see text \"Save with momentum, not just math.\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5752435
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I should see text \"Create Account\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5360009
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "I should see text \"Log In\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5019455
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 9761850
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-can-create-account-from-landing-page",
+        "keyword": "Scenario",
+        "line": 13,
+        "name": "User can create account from landing page",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 38481631
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 14,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 586270753
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I tap element with label \"landing-register-btn\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 81037895
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "I fill \"Email\" with \"e2e-register@goald.local\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 38522011
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "I fill \"Password (min 8 characters)\" with \"secret123\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 16099877
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "I tap element with label \"register-submit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 118058379
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "I should see text \"My Goals\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8832734
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 9313396
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;register-screen-shows-password-policy-guidance",
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "Register screen shows password policy guidance",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 39712598
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 22,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 727886622
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 23,
+            "name": "I tap element with label \"landing-register-btn\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 62116390
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "I fill \"Password (min 8 characters)\" with \"short\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 29989481
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "I should see text \"Password must have at least 8 characters\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7577412
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 8416864
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-can-log-in-from-landing-page",
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "User can log in from landing page",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 45093825
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 28,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 483773495
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 29,
+            "name": "I tap element with label \"landing-login-btn\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 65660737
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 30,
+            "name": "I fill \"Email\" with \"e2e-login@goald.local\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 31836444
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "I fill \"Password\" with \"secret123\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 13838211
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "I tap element with label \"login-submit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 110769319
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 33,
+            "name": "I should see text \"My Goals\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11828580
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 7910449
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;dashboard-filter-controls-are-available-after-login",
+        "keyword": "Scenario",
+        "line": 35,
+        "name": "Dashboard filter controls are available after login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 40134649
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 36,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 706819650
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 37,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 256046586
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 38,
+            "name": "I should see dashboard filter controls",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 28321517
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 10220881
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-can-open-goal-detail-and-use-deposit-search-after-login",
+        "keyword": "Scenario",
+        "line": 40,
+        "name": "User can open goal detail and use deposit search after login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 90985942
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 41,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 541372387
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 42,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 218901659
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 43,
+            "name": "I open the seeded goal detail view",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:64"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 121780745
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 44,
+            "name": "I should see deposit search input",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:71"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2833619
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 45,
+            "name": "I should see text \"Freelance payout\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 13713566
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 7339103
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-can-edit-seeded-goal-name-after-login",
+        "keyword": "Scenario",
+        "line": 47,
+        "name": "User can edit seeded goal name after login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 41969254
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 48,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 507086221
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 49,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 281182096
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 50,
+            "name": "I open the seeded goal detail view",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:64"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 107254049
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 51,
+            "name": "I tap text \"Edit Goal\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 88204679
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 52,
+            "name": "I fill \"e.g. Emergency Fund\" with \"E2E House Fund Updated\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 21368832
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 53,
+            "name": "I tap text \"Save Changes\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 159795004
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 54,
+            "name": "I should see text \"E2E House Fund Updated\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 24282736
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 11820788
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-can-record-a-deposit-note-after-login",
+        "keyword": "Scenario",
+        "line": 56,
+        "name": "User can record a deposit note after login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 73027562
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 57,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 552797500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 58,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 213932723
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 59,
+            "name": "I open the seeded goal detail view",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:64"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 109487831
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 60,
+            "name": "I tap text \"+ Add Deposit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 77106619
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 61,
+            "name": "I fill \"100\" with \"75\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22884101
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 62,
+            "name": "I fill \"e.g. Freelance payout\" with \"E2E test note\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 23433259
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 63,
+            "name": "I tap text \"Record Deposit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 99541107
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 64,
+            "name": "I should see text \"E2E test note\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10480625
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 10350937
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;user-creates-a-goal-and-returns-via-sidebar-navigation",
+        "keyword": "Scenario",
+        "line": 66,
+        "name": "User creates a goal and returns via sidebar navigation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 42355892
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 67,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 479536408
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 68,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 207472078
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 69,
+            "name": "I tap element with label \"dashboard-create-goal\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 96848520
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 70,
+            "name": "I fill \"e.g. Emergency Fund\" with \"UX Flow Goal\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 18828357
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 71,
+            "name": "I fill \"10000\" with \"6000\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 27479003
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 72,
+            "name": "I fill \"500\" with \"400\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:77"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 49139233
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 73,
+            "name": "I tap element with label \"create-goal-submit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 189044339
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 74,
+            "name": "I should see text \"UX Flow Goal\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 31899988
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 75,
+            "name": "I tap element with label \"sidebar-dashboard\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 43167537
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 76,
+            "name": "I should see text \"Portfolio Snapshot\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 24639911
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 7721181
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "visual-compounding-app-core-flows;create-goal-shows-required-field-errors-on-empty-submit",
+        "keyword": "Scenario",
+        "line": 78,
+        "name": "Create goal shows required field errors on empty submit",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 38182363
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 79,
+            "name": "I open the app entry page",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:9"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 505250293
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 80,
+            "name": "I log in from landing",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:39"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 214374611
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 81,
+            "name": "I tap element with label \"dashboard-create-goal\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 120209548
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 82,
+            "name": "I tap element with label \"create-goal-submit\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:33"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 134509358
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 83,
+            "name": "I should see text \"Goal name is required.\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 12160717
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 84,
+            "name": "I should see text \"Enter a target amount greater than zero.\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 13574335
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 85,
+            "name": "I should see text \"Enter a monthly contribution greater than zero.\"",
+            "match": {
+              "location": "features/step_definitions/app.steps.js:14"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6214219
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 19734950
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "visual-compounding-app-core-flows",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Visual compounding app core flows",
+    "tags": [],
+    "uri": "features/app-flows.feature"
+  },
+  {
+    "description": "  To verify the app is available end-to-end\n  As a team maintaining release quality\n  I want smoke scenarios that assert user-visible behavior",
+    "elements": [
+      {
+        "description": "",
+        "id": "home-page-behavior;home-page-title-is-correct",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Home page title is correct",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 64478582
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "I open the application home page",
+            "match": {
+              "location": "features/step_definitions/navigation.steps.js:4"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 405485941
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 8,
+            "name": "the page title should include \"Goald\"",
+            "match": {
+              "location": "features/step_definitions/navigation.steps.js:8"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 35762791
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5859343
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "home-page-behavior",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Home page behavior",
+    "tags": [],
+    "uri": "features/healthcheck.feature"
+  }
+]
