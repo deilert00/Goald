@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -21,7 +20,8 @@ import ThemeSelector from '../../components/ThemeSelector';
 import AppButton from '../../components/AppButton';
 import SidebarNav from '../../components/SidebarNav';
 import { formatCurrency, parseNumberInput } from '../../utils/format';
-import { trackEvent } from '../../services/telemetryService';
+import { captureError, trackEvent } from '../../services/telemetryService';
+import { showToast } from '../../services/toastService';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -37,6 +37,7 @@ export default function CreateGoalScreen() {
   const [visualTheme, setVisualTheme] = useState<ThemeType>('tree');
   const [loading, setLoading] = useState(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const didCompleteRef = useRef(false);
 
   const target = parseNumberInput(targetAmount);
   const monthly = parseNumberInput(monthlyContribution);
@@ -45,6 +46,25 @@ export default function CreateGoalScreen() {
     target > 0 && monthly > 0 ? estimateCompletionMonths(0, target, monthly, rate) : null;
 
   const trimmedName = name.trim();
+  const hasAnyInput =
+    trimmedName.length > 0 ||
+    targetAmount.trim().length > 0 ||
+    monthlyContribution.trim().length > 0 ||
+    annualInterestRate.trim().length > 0 ||
+    timelineMonths.trim().length > 0;
+
+  useEffect(() => {
+    trackEvent('create_goal_opened');
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (!didCompleteRef.current && hasAnyInput) {
+        trackEvent('create_goal_abandoned', { hadInput: true });
+      }
+    };
+  }, [hasAnyInput]);
+
   const fieldErrors = {
     name: submitAttempted && !trimmedName ? 'Goal name is required.' : '',
     targetAmount:
@@ -70,11 +90,11 @@ export default function CreateGoalScreen() {
       currentFieldErrors.targetAmount ||
       currentFieldErrors.monthlyContribution
     ) {
-      Alert.alert('Missing required fields', 'Please fix the highlighted fields and try again.');
+      showToast('Please fix the highlighted fields and try again.', 'error');
       return;
     }
     if (!user) {
-      Alert.alert('Sign in required', 'Please log in again before creating a goal.');
+      showToast('Please log in again before creating a goal.', 'error');
       return;
     }
 
@@ -90,10 +110,12 @@ export default function CreateGoalScreen() {
       });
       await scheduleMonthlyReminder(trimmedName).catch(() => {});
       trackEvent('goal_created', { theme: visualTheme });
-      Alert.alert('Goal created', 'Your goal was created successfully.');
+      didCompleteRef.current = true;
+      showToast('Goal created successfully.', 'success');
       navigation.replace('GoalDetail', { goalId });
     } catch (e: any) {
-      Alert.alert('Error', e.message);
+      captureError('create_goal_submit', e);
+      showToast(e?.message ?? 'Failed to create goal.', 'error');
     } finally {
       setLoading(false);
     }

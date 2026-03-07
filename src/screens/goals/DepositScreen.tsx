@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -25,7 +24,8 @@ import {
 } from '../../services/notificationService';
 import { isE2EMode } from '../../config/runtime';
 import { formatCurrency, parseNumberInput } from '../../utils/format';
-import { trackEvent } from '../../services/telemetryService';
+import { captureError, trackEvent } from '../../services/telemetryService';
+import { showToast } from '../../services/toastService';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -40,8 +40,22 @@ export default function DepositScreen() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
+  const didCompleteRef = useRef(false);
 
   const goal = goals.find((g) => g.id === goalId);
+
+  useEffect(() => {
+    trackEvent('deposit_opened', { goalId });
+  }, [goalId]);
+
+  useEffect(() => {
+    return () => {
+      const hasInput = amount.trim().length > 0 || note.trim().length > 0;
+      if (!didCompleteRef.current && hasInput) {
+        trackEvent('deposit_abandoned', { goalId, hadInput: true });
+      }
+    };
+  }, [amount, goalId, note]);
 
   function getCrossedMilestones(previousProgress: number, nextProgress: number): number[] {
     const milestones = [25, 50, 75];
@@ -53,7 +67,7 @@ export default function DepositScreen() {
   async function handleDeposit() {
     const depositAmount = parseNumberInput(amount);
     if (!depositAmount || depositAmount <= 0) {
-      Alert.alert('Error', 'Please enter a valid amount');
+      showToast('Please enter a valid amount.', 'error');
       return;
     }
     if (!user || !goal) return;
@@ -131,12 +145,17 @@ export default function DepositScreen() {
         trackEvent('goal_completed', { goalId });
         await sendGoalCompletedNotification(user.uid, goalId, goal.name).catch(() => {});
         await markGoalCompleted(goalId);
+        didCompleteRef.current = true;
+        showToast('Goal completed. Nice work!', 'success');
         navigation.replace('Celebration', { goalId, goalName: goal.name });
       } else {
+        didCompleteRef.current = true;
+        showToast('Deposit recorded.', 'success');
         navigation.goBack();
       }
     } catch (e: any) {
-      Alert.alert('Error', e.message);
+      captureError('deposit_submit', e);
+      showToast(e?.message ?? 'Failed to record deposit.', 'error');
     } finally {
       setLoading(false);
     }

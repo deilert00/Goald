@@ -8,7 +8,14 @@ type TelemetryEventName =
   | 'reset_password_requested'
   | 'goal_created'
   | 'deposit_added'
-  | 'goal_completed';
+  | 'goal_completed'
+  | 'error_captured'
+  | 'create_goal_opened'
+  | 'create_goal_abandoned'
+  | 'edit_goal_opened'
+  | 'edit_goal_abandoned'
+  | 'deposit_opened'
+  | 'deposit_abandoned';
 
 interface TelemetryPayload {
   [key: string]: string | number | boolean | null | undefined;
@@ -40,7 +47,12 @@ export function trackEvent(name: TelemetryEventName, payload?: TelemetryPayload)
   postEvent(name, payload).catch(() => {});
 }
 
-export function captureError(context: string, error: unknown): void {
+export function captureError(
+  context: string,
+  error: unknown,
+  extra?: TelemetryPayload
+): void {
   const message = error instanceof Error ? error.message : String(error);
-  postEvent('login_fail', { context, message }).catch(() => {});
+  const stack = error instanceof Error ? error.stack : undefined;
+  postEvent('error_captured', { context, message, stack, ...(extra ?? {}) }).catch(() => {});
 }

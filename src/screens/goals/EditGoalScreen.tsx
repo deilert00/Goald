@@ -23,6 +23,8 @@ import { estimateCompletionMonths } from '../../utils/compoundInterest';
 import AppButton from '../../components/AppButton';
 import SidebarNav from '../../components/SidebarNav';
 import { formatCurrency } from '../../utils/format';
+import { captureError, trackEvent } from '../../services/telemetryService';
+import { showToast } from '../../services/toastService';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditGoal'>;
 
@@ -44,6 +46,11 @@ export default function EditGoalScreen({ navigation, route }: Props) {
   const [timelineMonths, setTimelineMonths] = useState(goal?.timelineMonths?.toString() ?? '');
   const [visualTheme, setVisualTheme] = useState<ThemeType>(goal?.visualTheme ?? 'tree');
   const [loading, setLoading] = useState(false);
+  const [wasSaved, setWasSaved] = useState(false);
+
+  React.useEffect(() => {
+    trackEvent('edit_goal_opened');
+  }, []);
 
   React.useEffect(() => {
     if (!goal) return;
@@ -53,6 +60,36 @@ export default function EditGoalScreen({ navigation, route }: Props) {
     setTimelineMonths(goal.timelineMonths ? String(goal.timelineMonths) : '');
     setVisualTheme(goal.visualTheme ?? 'tree');
   }, [goal]);
+
+  React.useEffect(() => {
+    return () => {
+      if (!wasSaved) {
+        const isDirty =
+          name.trim() !== (goal?.name ?? '') ||
+          monthlyContribution.trim() !== String(goal?.monthlyContribution ?? '') ||
+          annualInterestRate.trim() !== String(goal?.annualInterestRate ?? '') ||
+          timelineMonths.trim() !== String(goal?.timelineMonths ?? '') ||
+          visualTheme !== (goal?.visualTheme ?? 'tree');
+
+        if (isDirty) {
+          trackEvent('edit_goal_abandoned', { goalId });
+        }
+      }
+    };
+  }, [
+    annualInterestRate,
+    goal?.annualInterestRate,
+    goal?.monthlyContribution,
+    goal?.name,
+    goal?.timelineMonths,
+    goal?.visualTheme,
+    goalId,
+    monthlyContribution,
+    name,
+    timelineMonths,
+    visualTheme,
+    wasSaved,
+  ]);
 
   const monthly = parseFloat(monthlyContribution) || 0;
   const rate = parseFloat(annualInterestRate) || 0;
@@ -65,13 +102,13 @@ export default function EditGoalScreen({ navigation, route }: Props) {
   async function handleSave() {
     if (!goal) return;
     if (!name.trim() || !monthlyContribution) {
-      Alert.alert('Error', 'Please fill in goal name and monthly contribution');
+      showToast('Please fill in goal name and monthly contribution.', 'error');
       return;
     }
 
     const timeline = timelineMonths.trim() ? parseInt(timelineMonths, 10) : undefined;
     if (timelineMonths.trim() && Number.isNaN(timeline)) {
-      Alert.alert('Error', 'Timeline must be a valid number of months');
+      showToast('Timeline must be a valid number of months.', 'error');
       return;
     }
 
@@ -84,9 +121,12 @@ export default function EditGoalScreen({ navigation, route }: Props) {
         visualTheme,
         timelineMonths: timeline,
       });
+      setWasSaved(true);
+      showToast('Goal changes saved.', 'success');
       navigation.goBack();
     } catch (e: any) {
-      Alert.alert('Error', e.message ?? 'Failed to update goal');
+      captureError('edit_goal_save', e);
+      showToast(e?.message ?? 'Failed to update goal.', 'error');
     } finally {
       setLoading(false);
     }
@@ -107,9 +147,12 @@ export default function EditGoalScreen({ navigation, route }: Props) {
             setLoading(true);
             try {
               await deleteGoalWithDeposits(goal.id);
+              setWasSaved(true);
+              showToast('Goal deleted.', 'success');
               navigation.navigate('AppTabs');
             } catch (e: any) {
-              Alert.alert('Error', e.message ?? 'Failed to delete goal');
+              captureError('edit_goal_delete', e);
+              showToast(e?.message ?? 'Failed to delete goal.', 'error');
             } finally {
               setLoading(false);
             }
