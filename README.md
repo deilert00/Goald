@@ -250,6 +250,78 @@ Note:
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
 
+### SSH / GitHub Authentication (Windows)
+
+If `git push` or `git clone` fails with `Permission denied (publickey)` on Windows,
+work through the checklist below. A [full guide](docs/github-ssh-troubleshooting.md)
+is available in `docs/github-ssh-troubleshooting.md`.
+
+**Quick steps:**
+
+1. **Verify your key pair exists**
+
+   ```bash
+   ls ~/.ssh
+   # Expect: id_ed25519 + id_ed25519.pub  (or id_rsa / id_rsa.pub)
+   ```
+
+   Generate a new key if none exists:
+
+   ```bash
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. **Add the key to ssh-agent**
+
+   Git Bash:
+
+   ```bash
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   ```
+
+   PowerShell (run as Administrator once):
+
+   ```powershell
+   Set-Service -Name ssh-agent -StartupType Automatic
+   Start-Service ssh-agent
+   ssh-add "$env:USERPROFILE\.ssh\id_ed25519"
+   ```
+
+3. **Upload your public key to GitHub**
+
+   ```bash
+   cat ~/.ssh/id_ed25519.pub   # copy the full output
+   ```
+
+   Then add it at <https://github.com/settings/keys>.
+
+4. **Test the connection**
+
+   ```bash
+   ssh -T git@github.com
+   # Success: Hi <username>! You've successfully authenticated…
+   ```
+
+5. **Debug with verbose output** if the test still fails:
+
+   ```bash
+   ssh -vvv git@github.com
+   ```
+
+   See the [full guide](docs/github-ssh-troubleshooting.md) for what each log line
+   means and how to handle firewalls, multiple keys, and `~/.ssh/config`.
+
+6. **PAT fallback** — if SSH cannot be made to work (corporate proxy, managed device),
+   switch to HTTPS and authenticate with a Personal Access Token:
+
+   ```bash
+   git remote set-url origin https://github.com/deilert00/Goald.git
+   # Enter your GitHub username + PAT when prompted
+   ```
+
+   Full instructions: [docs/github-ssh-troubleshooting.md § PAT Fallback](docs/github-ssh-troubleshooting.md#7-pat-fallback-https-authentication)
+
 ## Notes For Contributors
 
 - Keep selectors and user-facing labels stable for E2E reliability.
