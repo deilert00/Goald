@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Animated, TouchableOpacity, DimensionValue } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -33,7 +33,7 @@ function ConfettiItem({ index }: { index: number }) {
     <Animated.Text
       style={[
         styles.confettiItem,
-        { left: `${left}%` as any, transform: [{ translateY }], opacity },
+        { left: `${left}%` as DimensionValue, transform: [{ translateY }], opacity },
       ]}
     >
       {EMOJIS[index % EMOJIS.length]}

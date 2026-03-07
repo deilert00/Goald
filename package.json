@@ -15,6 +15,8 @@
     "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html",
     "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js",
     "test:e2e:ci": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html --format json:reports/cucumber-report.json",
+    "lint": "eslint 'src/**/*.{ts,tsx}' 'App.tsx'",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' 'App.tsx' --fix",
     "typecheck": "tsc --noEmit",
     "test:unit": "node --import tsx --test tests/**/*.test.ts",
     "admin:support": "node scripts/admin-support.mjs"
@@ -42,9 +44,16 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.7.0",
     "@types/react": "~18.3.12",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
     "cross-env": "^7.0.3",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-native": "^5.0.0",
     "firebase-admin": "^12.6.0",
     "playwright": "^1.52.0",
+    "prettier": "^3.8.1",
     "tsx": "^4.20.6",
     "typescript": "~5.3.3"
   },
