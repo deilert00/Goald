@@ -15,10 +15,10 @@ Given("I open the app entry page", async function () {
     return "skipped";
   }
 
-  const hasAuthUi = await textVisible(this.page, "Goald");
+  const hasVisualCompounding = await textVisible(this.page, "Visual Compounding");
   const hasDashboardUi = await textVisible(this.page, "My Goals");
 
-  if (!hasAuthUi && !hasDashboardUi) {
+  if (!hasVisualCompounding && !hasDashboardUi) {
     this.skipReason = "App shell is unavailable (likely missing env config/runtime error).";
     return "skipped";
   }
