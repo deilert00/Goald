@@ -232,6 +232,43 @@ Note:
 - Baseline support runbook and command usage:
   - `docs/ADMIN_SUPPORT_RUNBOOK.md`
 
+## GitHub Authentication (SSH Setup)
+
+This project uses SSH for Git operations.  
+Full guide: [`docs/SSH_GITHUB_SETUP.md`](docs/SSH_GITHUB_SETUP.md)
+
+### Quick start
+
+```bash
+# 1. Generate a key (skip if you already have one)
+ssh-keygen -t ed25519 -C "you@example.com"
+
+# 2. Copy the public key and add it to github.com/settings/keys
+cat ~/.ssh/id_ed25519.pub
+
+# 3. Verify connection — the response shows which GitHub account is active
+ssh -T git@github.com
+
+# 4. Run the repo helper to diagnose any issues
+bash scripts/check-ssh.sh
+```
+
+<!-- Screenshot placeholder: terminal output of `ssh -T git@github.com` showing "Hi <username>!" -->
+<!-- ![SSH verification](assets/screenshots/ssh-verify-terminal.png) -->
+
+### Troubleshooting at a glance
+
+| Symptom | Fix |
+|---|---|
+| Settings → SSH keys page is **empty** | Make sure you are in your **personal** account settings, not an organization — go to `https://github.com/settings/keys` |
+| Signed in as the wrong GitHub account | Sign out → sign in as the correct user → re-add the key |
+| `Permission denied (publickey)` | Load the key: `ssh-add ~/.ssh/id_ed25519` |
+| SAML/SSO error from organization | Visit `https://github.com/settings/keys` → Configure SSO → Authorize |
+| Corporate firewall blocks SSH | Use the [PAT fallback](docs/SSH_GITHUB_SETUP.md#pat-fallback-https-authentication) |
+
+See [`docs/SSH_GITHUB_SETUP.md`](docs/SSH_GITHUB_SETUP.md) for the full step-by-step
+instructions, screenshot placeholders, and all troubleshooting scenarios.
+
 ## Troubleshooting
 
 - `Executable doesn't exist` / Playwright browser missing:
