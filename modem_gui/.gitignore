@@ -1,0 +1,20 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Distribution / packaging
+dist/
+build/
+*.spec
+
+# pytest
+.pytest_cache/
+
+# PyInstaller / cx_Freeze
+*.exe
