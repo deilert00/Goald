@@ -1,0 +1,10 @@
+# No third-party packages required.
+# The application uses only Python's standard library:
+#   tkinter  — bundled with CPython on Windows, macOS, and most Linux distros
+#   urllib   — stdlib HTTP client
+#   xml.etree.ElementTree — stdlib XML parser
+#   json, threading, queue, dataclasses — all stdlib
+
+# Optional: install PyInstaller to build a standalone Windows executable
+# pyinstaller --onefile --windowed modem_manager.py
+# pyinstaller>=6.0

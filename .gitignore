@@ -47,3 +47,8 @@ GoogleService-Info.plist
 
 # E2E test reports (generated artifacts)
 reports/
+__pycache__
+desktop/__pycache__/
+desktop/tests/__pycache__/
+desktop/dist/
+desktop/build/
