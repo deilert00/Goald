@@ -50,6 +50,52 @@ Optional per platform:
 
 ## Local Setup
 
+### Cloning the Repository
+
+**macOS / Linux (SSH)**
+
+```bash
+git clone git@github.com:deilert00/Goald.git
+```
+
+**Windows — SSH (recommended)**
+
+The OpenSSH `ssh-agent` Windows service is **disabled by default** on many machines.
+Before cloning via SSH, enable and start it in an **elevated (Run as Administrator) PowerShell**:
+
+```powershell
+# Enable the service (only needed once)
+Set-Service -Name ssh-agent -StartupType Manual
+Start-Service ssh-agent
+
+# Add your SSH key
+ssh-add $env:USERPROFILE\.ssh\id_ed25519
+```
+
+Then clone:
+
+```bash
+git clone git@github.com:deilert00/Goald.git
+```
+
+Full step-by-step guide (key generation, GitHub key upload, troubleshooting):
+[`docs/WINDOWS_SSH_SETUP.md`](docs/WINDOWS_SSH_SETUP.md)
+
+**Windows — HTTPS + PAT (alternative)**
+
+If you are on a managed machine where you lack administrator privileges to modify Windows services, clone with HTTPS
+and authenticate with a GitHub Personal Access Token (PAT):
+
+```bash
+git clone https://github.com/deilert00/Goald.git
+# Username: your GitHub username
+# Password: your PAT (not your GitHub account password)
+```
+
+See [`docs/WINDOWS_SSH_SETUP.md`](docs/WINDOWS_SSH_SETUP.md) for PAT setup instructions.
+
+---
+
 1. Install dependencies:
 
 ```bash
@@ -249,6 +295,28 @@ Note:
 
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
+
+### Windows SSH / Clone Issues
+
+- **`Error connecting to agent`** or **`Permission denied (publickey)`** when cloning via SSH:
+  - The `ssh-agent` Windows service is disabled by default. Enable it in an elevated
+    PowerShell (`Run as Administrator`):
+    ```powershell
+    Set-Service -Name ssh-agent -StartupType Manual
+    Start-Service ssh-agent
+    ssh-add $env:USERPROFILE\.ssh\id_ed25519
+    ```
+  - Full guide: [`docs/WINDOWS_SSH_SETUP.md`](docs/WINDOWS_SSH_SETUP.md)
+
+- **`Access is denied`** when running `Set-Service` or `sc config`:
+  - You must use an **elevated** PowerShell session (right-click → Run as Administrator)
+
+- **Managed machine / service changes restricted**:
+  - Use HTTPS + a GitHub PAT instead of SSH:
+    ```bash
+    git clone https://github.com/deilert00/Goald.git
+    ```
+  - See [`docs/WINDOWS_SSH_SETUP.md`](docs/WINDOWS_SSH_SETUP.md) → Option B for PAT setup
 
 ## Notes For Contributors
 
