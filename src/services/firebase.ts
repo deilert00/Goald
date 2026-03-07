@@ -1,23 +1,23 @@
-// REPLACE these placeholder values with your own Firebase project config.
-// Get them from: https://console.firebase.google.com → Project Settings → Your apps → Web app
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+const env = process.env;
+
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+  apiKey: env.EXPO_PUBLIC_FIREBASE_API_KEY || 'demo-api-key',
+  authDomain: env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || 'demo.firebaseapp.com',
+  projectId: env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || 'demo-project',
+  storageBucket: env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || 'demo.appspot.com',
+  messagingSenderId: env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '000000000000',
+  appId: env.EXPO_PUBLIC_FIREBASE_APP_ID || '1:000000000000:web:demo',
 };
 
 export const isFirebaseConfigured =
-  firebaseConfig.apiKey !== 'YOUR_API_KEY' &&
-  firebaseConfig.authDomain !== 'YOUR_AUTH_DOMAIN' &&
-  firebaseConfig.projectId !== 'YOUR_PROJECT_ID' &&
-  firebaseConfig.appId !== 'YOUR_APP_ID';
+  !!env.EXPO_PUBLIC_FIREBASE_API_KEY &&
+  !!env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN &&
+  !!env.EXPO_PUBLIC_FIREBASE_PROJECT_ID &&
+  !!env.EXPO_PUBLIC_FIREBASE_APP_ID;
 
 const app = initializeApp(firebaseConfig);
 

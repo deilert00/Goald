@@ -13,7 +13,10 @@
     "test:e2e": "cucumber-js --config cucumber.js",
     "test:e2e:headed": "cross-env HEADLESS=false cucumber-js --config cucumber.js",
     "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html",
-    "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js"
+    "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js",
+    "test:e2e:ci": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html --format json:reports/cucumber-report.json",
+    "test:unit": "node --import tsx --test tests/**/*.test.ts",
+    "admin:support": "node scripts/admin-support.mjs"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
@@ -40,7 +43,9 @@
     "typescript": "~5.3.3",
     "@cucumber/cucumber": "^12.7.0",
     "cross-env": "^7.0.3",
-    "playwright": "^1.52.0"
+    "firebase-admin": "^12.6.0",
+    "playwright": "^1.52.0",
+    "tsx": "^4.20.6"
   },
   "overrides": {
     "tar": ">=7.5.10",
