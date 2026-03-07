@@ -18,6 +18,7 @@ import MilestoneAnimation from '../../components/MilestoneAnimation';
 import { projectGrowth, estimateCompletionMonths } from '../../utils/compoundInterest';
 import SidebarNav from '../../components/SidebarNav';
 import AppButton from '../../components/AppButton';
+import { formatCurrency, formatWholeNumber } from '../../utils/format';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'GoalDetail'>;
@@ -89,7 +90,6 @@ export default function GoalDetailScreen() {
         <Text style={styles.title}>{goal.name}</Text>
 
         <AppButton
-
           label="✏️ Edit Goal"
           variant="secondary"
           onPress={() => navigation.navigate('EditGoal', { goalId })}
@@ -102,18 +102,18 @@ export default function GoalDetailScreen() {
         <View style={styles.progressCard}>
           <ProgressBar progress={progress} height={20} />
           <Text style={styles.balanceText}>
-            ${goal.currentBalance.toFixed(2)}{' '}
+            {formatCurrency(goal.currentBalance)}{' '}
             <Text style={styles.balanceOf}>of</Text>{' '}
-            ${goal.targetAmount.toFixed(2)}
+            {formatCurrency(goal.targetAmount)}
           </Text>
           <Text style={styles.remainingText}>
-            ${Math.max(goal.targetAmount - goal.currentBalance, 0).toFixed(2)} remaining
+            {formatCurrency(Math.max(goal.targetAmount - goal.currentBalance, 0))} remaining
           </Text>
         </View>
 
         <View style={styles.statsCard}>
           <View style={styles.stat}>
-            <Text style={styles.statValue}>${goal.monthlyContribution}/mo</Text>
+            <Text style={styles.statValue}>{formatCurrency(goal.monthlyContribution)}/mo</Text>
             <Text style={styles.statLabel}>Contribution</Text>
           </View>
           <View style={styles.statDivider} />
@@ -139,7 +139,7 @@ export default function GoalDetailScreen() {
               {projections.map((bal, i) => (
                 <View key={i} style={styles.projItem}>
                   <Text style={styles.projMonth}>Mo {i + 1}</Text>
-                  <Text style={styles.projBal}>${bal.toFixed(0)}</Text>
+                  <Text style={styles.projBal}>${formatWholeNumber(bal)}</Text>
                 </View>
               ))}
             </ScrollView>
@@ -167,7 +167,7 @@ export default function GoalDetailScreen() {
             filteredDeposits.map((d) => (
                 <View key={d.id} style={styles.depositRow}>
                   <View>
-                    <Text style={styles.depositAmount}>+${d.amount.toFixed(2)}</Text>
+                      <Text style={styles.depositAmount}>+{formatCurrency(d.amount)}</Text>
                     {!!d.note && <Text style={styles.depositNote}>{d.note}</Text>}
                   </View>
                   <Text style={styles.depositDate}>

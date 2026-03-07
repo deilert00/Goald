@@ -22,6 +22,7 @@ import {
 import { estimateCompletionMonths } from '../../utils/compoundInterest';
 import AppButton from '../../components/AppButton';
 import SidebarNav from '../../components/SidebarNav';
+import { formatCurrency } from '../../utils/format';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditGoal'>;
 
@@ -151,7 +152,7 @@ export default function EditGoalScreen({ navigation, route }: Props) {
         <Text style={styles.label}>Target Amount</Text>
         <TextInput
           style={[styles.input, styles.disabledInput]}
-          value={`$${goal.targetAmount.toFixed(2)}`}
+          value={formatCurrency(goal.targetAmount)}
           editable={false}
         />
         <Text style={styles.helperText}>Target amount is locked after goal creation.</Text>

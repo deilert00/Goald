@@ -14,9 +14,15 @@ Feature: Visual compounding app core flows
     Given I open the app entry page
     When I tap element with label "landing-register-btn"
     And I fill "Email" with "e2e-register@goald.local"
-    And I fill "Password (min 6 characters)" with "secret123"
+    And I fill "Password (min 8 characters)" with "secret123"
     And I tap element with label "register-submit"
     Then I should see text "My Goals"
+
+  Scenario: Register screen shows password policy guidance
+    Given I open the app entry page
+    When I tap element with label "landing-register-btn"
+    And I fill "Password (min 8 characters)" with "short"
+    Then I should see text "Password must have at least 8 characters"
 
   Scenario: User can log in from landing page
     Given I open the app entry page
@@ -68,3 +74,12 @@ Feature: Visual compounding app core flows
     Then I should see text "UX Flow Goal"
     When I tap element with label "sidebar-dashboard"
     Then I should see text "Portfolio Snapshot"
+
+  Scenario: Create goal shows required field errors on empty submit
+    Given I open the app entry page
+    And I log in from landing
+    When I tap element with label "dashboard-create-goal"
+    And I tap element with label "create-goal-submit"
+    Then I should see text "Goal name is required."
+    And I should see text "Enter a target amount greater than zero."
+    And I should see text "Enter a monthly contribution greater than zero."

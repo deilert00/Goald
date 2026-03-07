@@ -58,6 +58,14 @@ Implementation status:
 - Numeric fields use numeric keyboard.
 - Validation message should be specific and recoverable.
 
+## 6. Progressive Goal Visual Build
+
+- Goal visual must always show the full final image in a low-opacity state.
+- Every contribution must incrementally increase visible, full-opacity area for that same image.
+- Visual reveal must be continuous with progress (not only milestone jumps).
+- House goals must follow stage narrative: land -> foundation -> walls -> roof -> landscaping.
+- Progress label should indicate current build stage and visible percentage.
+
 ## Accessibility Requirements
 
 - Interactive controls must expose accessibility labels.
@@ -78,12 +86,14 @@ Current labels added for testing and accessibility:
 Must-pass scenarios:
 - Landing renders value proposition and auth CTAs.
 - Account creation leads to Dashboard.
+- Register flow shows password policy guidance for short passwords.
 - Login leads to Dashboard.
 - Dashboard control set renders after auth.
 - Goal detail opens and deposit search appears.
 - Goal edit persists.
 - Deposit note persists.
 - Goal creation routes to new detail screen.
+- Goal creation shows inline required-field errors on empty submit.
 - Sidebar navigation returns user to Dashboard.
 
 ## B. UX Regression Checklist (Manual)

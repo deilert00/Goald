@@ -26,8 +26,8 @@ export default function RegisterScreen({ navigation }: Props) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters');
       return;
     }
     setLoading(true);
@@ -61,7 +61,7 @@ export default function RegisterScreen({ navigation }: Props) {
       <View style={styles.passwordContainer}>
         <TextInput
           style={styles.passwordInput}
-          placeholder="Password (min 6 characters)"
+          placeholder="Password (min 8 characters)"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
@@ -75,8 +75,8 @@ export default function RegisterScreen({ navigation }: Props) {
           <Text style={styles.eyeText}>{showPassword ? '🙈' : '👁️'}</Text>
         </TouchableOpacity>
       </View>
-      {password.length > 0 && password.length < 6 && (
-        <Text style={styles.passwordHint}>Password must have at least 6 characters ({password.length}/6)</Text>
+      {password.length > 0 && password.length < 8 && (
+        <Text style={styles.passwordHint}>Password must have at least 8 characters ({password.length}/8)</Text>
       )}
 
       <TouchableOpacity style={styles.btn} onPress={handleRegister} disabled={loading}>

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Goal } from '../services/goalService';
 import ProgressBar from './ProgressBar';
 import MilestoneAnimation from './MilestoneAnimation';
+import { formatCurrency } from '../utils/format';
 
 interface Props {
   goal: Goal;
@@ -50,8 +51,8 @@ export default function GoalCard({ goal, onPress }: Props) {
       </View>
       <ProgressBar progress={progress} color={progressColor(progress)} />
       <View style={styles.row}>
-        <Text style={styles.sub}>${goal.currentBalance.toFixed(2)} saved</Text>
-        <Text style={styles.sub}>of ${goal.targetAmount.toFixed(2)}</Text>
+        <Text style={styles.sub}>{formatCurrency(goal.currentBalance)} saved</Text>
+        <Text style={styles.sub}>of {formatCurrency(goal.targetAmount)}</Text>
       </View>
       <View style={styles.labelRow}>
         <Text style={[styles.statusLabel, { color: label.color }]}>{label.text}</Text>

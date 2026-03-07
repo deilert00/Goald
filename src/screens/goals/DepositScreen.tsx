@@ -24,6 +24,8 @@ import {
   sendGoalCompletedNotification,
 } from '../../services/notificationService';
 import { isE2EMode } from '../../config/runtime';
+import { formatCurrency, parseNumberInput } from '../../utils/format';
+import { trackEvent } from '../../services/telemetryService';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -49,7 +51,7 @@ export default function DepositScreen() {
   }
 
   async function handleDeposit() {
-    const depositAmount = parseFloat(amount);
+    const depositAmount = parseNumberInput(amount);
     if (!depositAmount || depositAmount <= 0) {
       Alert.alert('Error', 'Please enter a valid amount');
       return;
@@ -59,6 +61,7 @@ export default function DepositScreen() {
     setLoading(true);
     try {
       await addDeposit(goalId, user.uid, depositAmount, note);
+      trackEvent('deposit_added', { amount: depositAmount, goalId });
 
       const newBalance = goal.currentBalance + depositAmount;
       await updateGoalBalance(goalId, newBalance);
@@ -125,6 +128,7 @@ export default function DepositScreen() {
       );
 
       if (isCompleted && !goal.completedAt) {
+        trackEvent('goal_completed', { goalId });
         await sendGoalCompletedNotification(user.uid, goalId, goal.name).catch(() => {});
         await markGoalCompleted(goalId);
         navigation.replace('Celebration', { goalId, goalName: goal.name });
@@ -148,10 +152,10 @@ export default function DepositScreen() {
         <View style={styles.goalSummary}>
           <Text style={styles.goalName}>{goal.name}</Text>
           <View style={styles.goalAmounts}>
-            <Text style={styles.goalBalance}>${goal.currentBalance.toFixed(2)} saved</Text>
+              <Text style={styles.goalBalance}>{formatCurrency(goal.currentBalance)} saved</Text>
             <Text style={styles.goalSeparator}> · </Text>
             <Text style={styles.goalRemaining}>
-              ${Math.max(goal.targetAmount - goal.currentBalance, 0).toFixed(2)} remaining
+                {formatCurrency(Math.max(goal.targetAmount - goal.currentBalance, 0))} remaining
             </Text>
           </View>
         </View>
@@ -162,14 +166,17 @@ export default function DepositScreen() {
         style={styles.input}
         value={amount}
         onChangeText={setAmount}
-        placeholder="100"
+        placeholder="Example: 100"
+        placeholderTextColor="#9BA7A0"
         keyboardType="numeric"
         autoFocus
       />
-      {goal && !isNaN(parseFloat(amount)) && parseFloat(amount) > 0 && (
+      {goal && parseNumberInput(amount) > 0 && (
         <Text style={styles.depositHint}>
-          {Math.min((goal.currentBalance + parseFloat(amount)) / goal.targetAmount * 100, 100).toFixed(1)}% of goal after deposit
-          {goal.currentBalance + parseFloat(amount) >= goal.targetAmount ? ' 🎉' : ''}
+          {Math.min((goal.currentBalance + parseNumberInput(amount)) / goal.targetAmount * 100, 100).toFixed(1)}% of goal after deposit
+          {' • '}
+          {formatCurrency(parseNumberInput(amount))} entered
+          {goal.currentBalance + parseNumberInput(amount) >= goal.targetAmount ? ' 🎉' : ''}
         </Text>
       )}
 
@@ -179,6 +186,7 @@ export default function DepositScreen() {
         value={note}
         onChangeText={setNote}
         placeholder="e.g. Freelance payout"
+        placeholderTextColor="#9BA7A0"
         maxLength={120}
       />
       <Text style={styles.charCount}>{note.length}/120</Text>

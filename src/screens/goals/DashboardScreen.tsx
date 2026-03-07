@@ -17,6 +17,7 @@ import { useGoals } from '../../hooks/useGoals';
 import { useStreak } from '../../hooks/useStreak';
 import GoalCard from '../../components/GoalCard';
 import { logout } from '../../services/authService';
+import { formatCurrency } from '../../utils/format';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -76,8 +77,8 @@ export default function DashboardScreen() {
 
       <View style={styles.insightsCard}>
         <Text style={styles.insightsTitle}>Portfolio Snapshot</Text>
-        <Text style={styles.insightsText}>Saved: ${insights.totalSaved.toFixed(2)}</Text>
-        <Text style={styles.insightsText}>Monthly plan: ${insights.totalMonthly.toFixed(2)}/mo</Text>
+        <Text style={styles.insightsText}>Saved: {formatCurrency(insights.totalSaved)}</Text>
+        <Text style={styles.insightsText}>Monthly plan: {formatCurrency(insights.totalMonthly)}/mo</Text>
         <Text style={styles.insightsText}>Active goals: {insights.activeGoals}</Text>
       </View>
 

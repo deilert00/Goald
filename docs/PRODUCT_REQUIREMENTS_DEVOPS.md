@@ -33,6 +33,7 @@ Current status:
 - Register/login/logout: implemented.
 - Password reset: implemented from login screen.
 - Session persistence: handled by Firebase Auth (when configured).
+- Password policy minimum length: raised to 8 in register UX.
 
 ## 2.2 User Persistence and Data Model
 
@@ -74,6 +75,13 @@ Current status:
 - Milestone notifications (25/50/75%).
 - Completion notification.
 - Deduplicate notifications by user/goal/milestone.
+
+## 2.6 Visual Compounding Build Requirement
+
+- For each goal theme, render a full final image baseline at low opacity.
+- As progress increases, reveal full-opacity area continuously according to current progress ratio.
+- Contributions of any size must visibly increase revealed area.
+- For home/house goals, reveal sequence must reflect build stages: land -> foundation -> walls -> roof -> landscaping.
 
 ## 2.6 Accessibility and UX
 
@@ -196,19 +204,24 @@ Promotion path:
 ## 9. Current Gap Assessment
 
 Gaps to close before production:
-- Firebase config still uses placeholder constants in source.
 - No dedicated admin console.
-- Password policy should be hardened.
-- Firestore security rule verification not yet documented in repo.
-- CI should be fully self-contained for deterministic E2E startup.
+- MFA support remains pending.
+- Full observability stack integration (Sentry/Datadog) remains pending.
+
+Recently closed gaps:
+- Environment-based Firebase configuration implemented (`EXPO_PUBLIC_FIREBASE_*`).
+- Firestore rules added to repo (`firestore.rules`, `firebase.json`).
+- CI made self-contained for deterministic E2E startup.
+- Password policy hardened to minimum 8 characters in registration flow.
+- Admin support baseline script/runbook added for status/reset/disable/enable operations.
 
 ## 10. Delivery Roadmap (Suggested)
 
 ## Phase A: Auth Hardening (1-2 sprints)
 
-- Environment-based Firebase configuration.
-- Harden password policy and auth error copy.
-- Admin reset/disable backend endpoint and support UI.
+- Environment-based Firebase configuration. (Done)
+- Harden password policy and auth error copy. (Done)
+- Admin reset/disable backend endpoint and support UI. (Partially done: CLI baseline, UI pending)
 
 ## Phase B: Release Readiness (1 sprint)
 
