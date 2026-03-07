@@ -70,7 +70,13 @@ npx playwright install --with-deps chromium
 
 ## Firebase Configuration (Normal Mode)
 
-Set environment variables (for Expo web/mobile) before starting app:
+Copy `.env.example` to `.env` and fill in your Firebase project values:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with values from the Firebase Console (Project Settings > General > SDK setup and configuration):
 
 - `EXPO_PUBLIC_FIREBASE_API_KEY`
 - `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN`
@@ -79,7 +85,7 @@ Set environment variables (for Expo web/mobile) before starting app:
 - `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
 - `EXPO_PUBLIC_FIREBASE_APP_ID`
 
-Without valid values, normal login/register and Firestore-backed flows will not work.
+Without valid values, the app will throw a startup error in normal mode. Use `EXPO_PUBLIC_E2E_MODE=true` to bypass Firebase for testing.
 
 ## Run Application Locally
 
@@ -239,7 +245,7 @@ Note:
   - verify `BASE_URL` matches active server URL
 
 - App shows auth/data errors in normal mode:
-  - verify Firebase config in `src/services/firebase.ts`
+  - verify Firebase env vars are set (see `.env.example`)
 
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
