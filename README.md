@@ -250,6 +250,16 @@ Note:
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
 
+- **`ssh -T git@github.com` → `Permission denied (publickey)` on Windows:**
+  - see [`docs/SSH_TROUBLESHOOTING.md`](docs/SSH_TROUBLESHOOTING.md) for a step-by-step guide
+  - includes: diagnosing which key is offered (`ssh -vvv`), adding the public key to GitHub,
+    configuring `~/.ssh/config` with `IdentityFile`, handling multiple keys,
+    and HTTPS + PAT / Git Credential Manager fallback
+  - run the PowerShell helper script for an automated diagnosis:
+    ```powershell
+    .\scripts\check-ssh.ps1
+    ```
+
 ## Notes For Contributors
 
 - Keep selectors and user-facing labels stable for E2E reliability.
