@@ -70,14 +70,14 @@ npx playwright install --with-deps chromium
 
 ## Firebase Configuration (Normal Mode)
 
-Set real Firebase values in `src/services/firebase.ts`:
+Set environment variables (for Expo web/mobile) before starting app:
 
-- `apiKey`
-- `authDomain`
-- `projectId`
-- `storageBucket`
-- `messagingSenderId`
-- `appId`
+- `EXPO_PUBLIC_FIREBASE_API_KEY`
+- `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `EXPO_PUBLIC_FIREBASE_PROJECT_ID`
+- `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `EXPO_PUBLIC_FIREBASE_APP_ID`
 
 Without valid values, normal login/register and Firestore-backed flows will not work.
 
@@ -177,12 +177,14 @@ Workflow: `.github/workflows/e2e-bdd.yml`
 Current behavior:
 - installs dependencies
 - installs Playwright Chromium (with deps)
-- runs Cucumber suite
+- starts Expo web in deterministic mode
+- waits for server readiness
+- runs deterministic Cucumber suite
 - uploads `reports/` artifact
 
 Note:
 - `npm run test:e2e` needs a reachable `BASE_URL` app endpoint.
-- If you want fully self-contained CI, run Expo web server in background and use deterministic E2E mode before running tests.
+- CI workflow is now self-contained for deterministic E2E.
 
 ## Available npm Scripts
 
@@ -195,17 +197,34 @@ Note:
 - `npm run test:e2e:headed`: Cucumber with headed browser
 - `npm run test:e2e:report`: Cucumber with HTML report
 - `npm run test:e2e:full`: Deterministic run (`EXPO_PUBLIC_E2E_MODE=true` + `BASE_URL=http://localhost:3000`)
+- `npm run test:e2e:ci`: Deterministic run with HTML + JSON report outputs
+- `npm run test:unit`: Node test runner coverage for core financial utilities
+- `npm run admin:support -- <status|reset|disable|enable> <email-or-uid>`: support operations via Firebase Admin SDK
 
 ## Environment Variables
 
 - `EXPO_PUBLIC_E2E_MODE`
   - `true`: use deterministic in-memory auth/data for tests
   - unset/`false`: use real Firebase services
+- `EXPO_PUBLIC_FIREBASE_*`
+  - Firebase client configuration for normal mode
 - `BASE_URL`
   - URL used by Playwright/Cucumber
   - default in world: `http://localhost:3000`
 - `HEADLESS`
   - `false` to run Playwright with visible browser window
+- `EXPO_PUBLIC_TELEMETRY_ENDPOINT`
+  - optional endpoint URL for product telemetry events
+
+## Security Rules
+
+- Firestore security rules are defined in `firestore.rules`.
+- Firebase config references rules in `firebase.json`.
+
+## Admin Support
+
+- Baseline support runbook and command usage:
+  - `docs/ADMIN_SUPPORT_RUNBOOK.md`
 
 ## Troubleshooting
 

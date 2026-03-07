@@ -25,21 +25,25 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Build Expo web app
-        env:
-          EXPO_PUBLIC_E2E_MODE: "true"
-        run: npx expo export --platform web
+      - name: Start web app in deterministic mode
+        run: |
+          nohup npm run web:e2e >/tmp/web-e2e.log 2>&1 &
 
-      - name: Start web server
-        run: npx serve dist --no-clipboard -l 3000 &
-
-      - name: Wait for web server to be ready
-        run: npx wait-on http://localhost:3000 --timeout 60000
+      - name: Wait for web server
+        run: |
+          for i in {1..90}; do
+            if curl -sSf http://localhost:3000 >/dev/null; then
+              echo "Web server is ready"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Web server failed to start"
+          cat /tmp/web-e2e.log || true
+          exit 1
 
       - name: Run BDD E2E suite
-        env:
-          BASE_URL: ${{ vars.BASE_URL || 'http://localhost:3000' }}
-        run: npm run test:e2e
+        run: npm run test:e2e:ci
 
       - name: Upload cucumber report
         if: always()
@@ -47,3 +51,7 @@ jobs:
         with:
           name: cucumber-report
           path: reports/
+
+      - name: Print web server logs on failure
+        if: failure()
+        run: cat /tmp/web-e2e.log || true
