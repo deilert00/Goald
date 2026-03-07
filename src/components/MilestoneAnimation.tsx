@@ -66,85 +66,96 @@ function getBuildSteps(theme: ThemeType): BuildStep[] {
 
 function getStageLabel(progress: number, steps: BuildStep[]): string {
   if (progress >= 1) return 'Goal complete';
-  const next = steps.find((step) => progress < step.to);
-  return next ? `Building: ${next.label}` : 'Building';
+  const current = steps.find((step) => progress >= step.from && progress < step.to);
+  return current ? `Building: ${current.label}` : 'Building';
 }
 
-function HouseScene() {
+function rangeOpacity(progress: number, from: number, to: number): number {
+  if (progress <= from) return 0;
+  if (progress >= to) return 1;
+  return (progress - from) / Math.max(to - from, 0.0001);
+}
+
+function HouseScene({ progress }: { progress: number }) {
+  const foundationOpacity = rangeOpacity(progress, 0.18, 0.38);
+  const wallsOpacity = rangeOpacity(progress, 0.36, 0.6);
+  const roofOpacity = rangeOpacity(progress, 0.58, 0.82);
+  const landscapingOpacity = rangeOpacity(progress, 0.8, 1);
+
   return (
     <View style={styles.sceneInner}>
       <View style={styles.houseSky} />
-      <View style={styles.houseGround} />
-      <View style={styles.houseFoundation} />
-      <View style={styles.houseWalls} />
-      <View style={styles.houseDoor} />
-      <View style={styles.houseRoof} />
-      <View style={styles.treeLeft} />
-      <View style={styles.treeRight} />
+      <View style={[styles.houseGround, { opacity: rangeOpacity(progress, 0, 0.22) }]} />
+      <View style={[styles.houseFoundation, { opacity: foundationOpacity }]} />
+      <View style={[styles.houseWalls, { opacity: wallsOpacity }]} />
+      <View style={[styles.houseDoor, { opacity: wallsOpacity }]} />
+      <View style={[styles.houseRoof, { opacity: roofOpacity }]} />
+      <View style={[styles.treeLeft, { opacity: landscapingOpacity }]} />
+      <View style={[styles.treeRight, { opacity: landscapingOpacity }]} />
     </View>
   );
 }
 
-function TreeScene() {
+function TreeScene({ progress }: { progress: number }) {
   return (
     <View style={styles.sceneInner}>
       <View style={styles.treeSky} />
-      <View style={styles.treeGround} />
-      <View style={styles.treeTrunk} />
-      <View style={styles.treeCanopy} />
-      <View style={styles.treeCanopySmall} />
+      <View style={[styles.treeGround, { opacity: rangeOpacity(progress, 0, 0.25) }]} />
+      <View style={[styles.treeTrunk, { opacity: rangeOpacity(progress, 0.2, 0.5) }]} />
+      <View style={[styles.treeCanopy, { opacity: rangeOpacity(progress, 0.45, 0.8) }]} />
+      <View style={[styles.treeCanopySmall, { opacity: rangeOpacity(progress, 0.75, 1) }]} />
     </View>
   );
 }
 
-function RocketScene() {
+function RocketScene({ progress }: { progress: number }) {
   return (
     <View style={styles.sceneInner}>
       <View style={styles.rocketSky} />
-      <View style={styles.rocketGround} />
-      <View style={styles.launchPad} />
-      <View style={styles.rocketBody} />
-      <View style={styles.rocketNose} />
-      <View style={styles.rocketFinLeft} />
-      <View style={styles.rocketFinRight} />
-      <View style={styles.rocketFlame} />
+      <View style={[styles.rocketGround, { opacity: rangeOpacity(progress, 0, 0.22) }]} />
+      <View style={[styles.launchPad, { opacity: rangeOpacity(progress, 0.08, 0.26) }]} />
+      <View style={[styles.rocketBody, { opacity: rangeOpacity(progress, 0.2, 0.52) }]} />
+      <View style={[styles.rocketNose, { opacity: rangeOpacity(progress, 0.42, 0.68) }]} />
+      <View style={[styles.rocketFinLeft, { opacity: rangeOpacity(progress, 0.42, 0.72) }]} />
+      <View style={[styles.rocketFinRight, { opacity: rangeOpacity(progress, 0.42, 0.72) }]} />
+      <View style={[styles.rocketFlame, { opacity: rangeOpacity(progress, 0.78, 1) }]} />
     </View>
   );
 }
 
-function IslandScene() {
+function IslandScene({ progress }: { progress: number }) {
   return (
     <View style={styles.sceneInner}>
       <View style={styles.islandSky} />
-      <View style={styles.islandWater} />
-      <View style={styles.islandSand} />
-      <View style={styles.palmTrunk} />
-      <View style={styles.palmLeaves} />
-      <View style={styles.cabana} />
+      <View style={[styles.islandWater, { opacity: rangeOpacity(progress, 0, 0.22) }]} />
+      <View style={[styles.islandSand, { opacity: rangeOpacity(progress, 0.18, 0.42) }]} />
+      <View style={[styles.palmTrunk, { opacity: rangeOpacity(progress, 0.38, 0.7) }]} />
+      <View style={[styles.palmLeaves, { opacity: rangeOpacity(progress, 0.55, 0.85) }]} />
+      <View style={[styles.cabana, { opacity: rangeOpacity(progress, 0.78, 1) }]} />
     </View>
   );
 }
 
-function CarScene() {
+function CarScene({ progress }: { progress: number }) {
   return (
     <View style={styles.sceneInner}>
       <View style={styles.carSky} />
-      <View style={styles.carRoad} />
-      <View style={styles.carBody} />
-      <View style={styles.carRoof} />
-      <View style={styles.carWheelLeft} />
-      <View style={styles.carWheelRight} />
-      <View style={styles.carWindow} />
+      <View style={[styles.carRoad, { opacity: rangeOpacity(progress, 0, 0.2) }]} />
+      <View style={[styles.carBody, { opacity: rangeOpacity(progress, 0.2, 0.5) }]} />
+      <View style={[styles.carWheelLeft, { opacity: rangeOpacity(progress, 0.35, 0.65) }]} />
+      <View style={[styles.carWheelRight, { opacity: rangeOpacity(progress, 0.35, 0.65) }]} />
+      <View style={[styles.carRoof, { opacity: rangeOpacity(progress, 0.5, 0.82) }]} />
+      <View style={[styles.carWindow, { opacity: rangeOpacity(progress, 0.72, 1) }]} />
     </View>
   );
 }
 
-function ThemeScene({ theme }: { theme: ThemeType }) {
-  if (theme === 'house') return <HouseScene />;
-  if (theme === 'rocket') return <RocketScene />;
-  if (theme === 'island') return <IslandScene />;
-  if (theme === 'car') return <CarScene />;
-  return <TreeScene />;
+function ThemeScene({ theme, progress }: { theme: ThemeType; progress: number }) {
+  if (theme === 'house') return <HouseScene progress={progress} />;
+  if (theme === 'rocket') return <RocketScene progress={progress} />;
+  if (theme === 'island') return <IslandScene progress={progress} />;
+  if (theme === 'car') return <CarScene progress={progress} />;
+  return <TreeScene progress={progress} />;
 }
 
 export default function MilestoneAnimation({ 
@@ -152,7 +163,6 @@ export default function MilestoneAnimation({
   theme = 'tree',
   showLabel = true,
 }: Props) {
-  const reveal = useRef(new Animated.Value(0)).current;
   const pulse = useRef(new Animated.Value(1)).current;
   const safeProgress = Math.max(0, Math.min(1, progress));
   const sceneHeight = showLabel ? 150 : 96;
@@ -161,15 +171,6 @@ export default function MilestoneAnimation({
   const progressStage = calculateProgressStage(progressPercent);
   const steps = useMemo(() => getBuildSteps(theme), [theme]);
   const stageLabel = getStageLabel(safeProgress, steps);
-
-  useEffect(() => {
-    Animated.timing(reveal, {
-      toValue: safeProgress,
-      duration: 420,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: false,
-    }).start();
-  }, [reveal, safeProgress]);
 
   useEffect(() => {
     const loop = Animated.loop(
@@ -182,11 +183,6 @@ export default function MilestoneAnimation({
     return () => loop.stop();
   }, [pulse]);
 
-  const revealHeight = reveal.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, sceneHeight],
-  });
-
   return (
     <View style={styles.container}>
       <Animated.View
@@ -196,17 +192,12 @@ export default function MilestoneAnimation({
         ]}
       >
         <View style={styles.fadedScene}>
-          <ThemeScene theme={theme} />
+          <ThemeScene theme={theme} progress={1} />
         </View>
 
-        <Animated.View
-          style={[
-            { height: revealHeight },
-            styles.revealContainer,
-          ]}
-        >
-          <ThemeScene theme={theme} />
-        </Animated.View>
+        <View style={styles.revealContainer}>
+          <ThemeScene theme={theme} progress={safeProgress} />
+        </View>
       </Animated.View>
       
       {showLabel && (
