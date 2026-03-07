@@ -12,6 +12,7 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { login, resetPassword } from '../../services/authService';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 type Props = { navigation: NativeStackNavigationProp<RootStackParamList, 'Login'> };
 
@@ -29,8 +30,8 @@ export default function LoginScreen({ navigation }: Props) {
     setLoading(true);
     try {
       await login(email.trim(), password);
-    } catch (e: any) {
-      Alert.alert('Login failed', e.message);
+    } catch (error: unknown) {
+      Alert.alert('Login failed', getErrorMessage(error, 'Login failed. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -45,8 +46,8 @@ export default function LoginScreen({ navigation }: Props) {
     try {
       await resetPassword(emailToReset);
       Alert.alert('Reset link sent', `If an account exists for ${emailToReset}, a reset email has been sent.`);
-    } catch (e: any) {
-      Alert.alert('Reset failed', e.message);
+    } catch (error: unknown) {
+      Alert.alert('Reset failed', getErrorMessage(error, 'Reset failed. Please try again.'));
     }
   }
 

@@ -22,6 +22,7 @@ import SidebarNav from '../../components/SidebarNav';
 import { formatCurrency, parseNumberInput } from '../../utils/format';
 import { captureError, trackEvent } from '../../services/telemetryService';
 import { showToast } from '../../services/toastService';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -113,9 +114,9 @@ export default function CreateGoalScreen() {
       didCompleteRef.current = true;
       showToast('Goal created successfully.', 'success');
       navigation.replace('GoalDetail', { goalId });
-    } catch (e: any) {
-      captureError('create_goal_submit', e);
-      showToast(e?.message ?? 'Failed to create goal.', 'error');
+    } catch (error: unknown) {
+      captureError('create_goal_submit', error);
+      showToast(getErrorMessage(error, 'Failed to create goal.'), 'error');
     } finally {
       setLoading(false);
     }

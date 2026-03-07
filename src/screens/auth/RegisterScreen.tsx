@@ -12,6 +12,7 @@ import {
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { register } from '../../services/authService';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 type Props = { navigation: NativeStackNavigationProp<RootStackParamList, 'Register'> };
 
@@ -33,8 +34,8 @@ export default function RegisterScreen({ navigation }: Props) {
     setLoading(true);
     try {
       await register(email.trim(), password);
-    } catch (e: any) {
-      Alert.alert('Registration failed', e.message);
+    } catch (error: unknown) {
+      Alert.alert('Registration failed', getErrorMessage(error, 'Registration failed. Please try again.'));
     } finally {
       setLoading(false);
     }

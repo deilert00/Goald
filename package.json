@@ -15,6 +15,7 @@
     "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html",
     "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js",
     "test:e2e:ci": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html --format json:reports/cucumber-report.json",
+    "typecheck": "tsc --noEmit",
     "test:unit": "node --import tsx --test tests/**/*.test.ts",
     "admin:support": "node scripts/admin-support.mjs"
   },

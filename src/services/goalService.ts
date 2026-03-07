@@ -39,8 +39,22 @@ export interface Goal {
   currentBalance: number;
 }
 
+/** Typed shape of a goal document as stored in Firestore. */
+interface GoalDocData {
+  userId: string;
+  name: string;
+  targetAmount: number;
+  monthlyContribution: number;
+  annualInterestRate: number;
+  timelineMonths?: number;
+  visualTheme?: ThemeType;
+  createdAt: Timestamp;
+  completedAt?: Timestamp;
+  currentBalance?: number;
+}
+
 function mapGoal(snap: QueryDocumentSnapshot): Goal {
-  const d = snap.data();
+  const d = snap.data() as GoalDocData;
   return {
     id: snap.id,
     userId: d.userId,
@@ -82,7 +96,7 @@ export async function updateGoalBalance(goalId: string, newBalance: number): Pro
 
 export async function markGoalCompleted(goalId: string): Promise<void> {
   if (isE2EMode) {
-    e2eUpdateGoal(goalId, { completedAt: serverTimestamp() as unknown as Timestamp });
+    e2eUpdateGoal(goalId, { completedAt: Timestamp.now() });
     return;
   }
   await updateDoc(doc(db, 'goals', goalId), { completedAt: serverTimestamp() });

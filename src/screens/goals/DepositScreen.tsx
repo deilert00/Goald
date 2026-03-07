@@ -26,6 +26,7 @@ import { isE2EMode } from '../../config/runtime';
 import { formatCurrency, parseNumberInput } from '../../utils/format';
 import { captureError, trackEvent } from '../../services/telemetryService';
 import { showToast } from '../../services/toastService';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 type Route = RouteProp<RootStackParamList, 'Deposit'>;
@@ -153,9 +154,9 @@ export default function DepositScreen() {
         showToast('Deposit recorded.', 'success');
         navigation.goBack();
       }
-    } catch (e: any) {
-      captureError('deposit_submit', e);
-      showToast(e?.message ?? 'Failed to record deposit.', 'error');
+    } catch (error: unknown) {
+      captureError('deposit_submit', error);
+      showToast(getErrorMessage(error, 'Failed to record deposit.'), 'error');
     } finally {
       setLoading(false);
     }

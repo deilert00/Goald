@@ -206,7 +206,7 @@ export default function MilestoneAnimation({
           <Text style={styles.progressText}>{Math.round(safeProgress * 100)}% visible</Text>
           <Text style={styles.stageText}>Stage {progressStage + 1} of 11</Text>
           {theme === 'house' && (
-            <Text style={styles.houseStepText}>Land -> Foundation -> Walls -> Roof -> Landscaping</Text>
+            <Text style={styles.houseStepText}>{'Land -> Foundation -> Walls -> Roof -> Landscaping'}</Text>
           )}
         </View>
       )}
