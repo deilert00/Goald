@@ -250,6 +250,11 @@ Note:
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
 
+- **Windows ssh-agent fails to start** (service disabled, missing binary, permissions, or policy):
+  - see [`docs/windows-ssh-agent.md`](docs/windows-ssh-agent.md) for a full PowerShell
+    diagnostic walkthrough and alternative authentication paths (GCM + HTTPS, PuTTY/Pageant,
+    WSL ssh-agent)
+
 ## Notes For Contributors
 
 - Keep selectors and user-facing labels stable for E2E reliability.
