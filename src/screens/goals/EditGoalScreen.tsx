@@ -25,6 +25,7 @@ import SidebarNav from '../../components/SidebarNav';
 import { formatCurrency } from '../../utils/format';
 import { captureError, trackEvent } from '../../services/telemetryService';
 import { showToast } from '../../services/toastService';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditGoal'>;
 
@@ -124,9 +125,9 @@ export default function EditGoalScreen({ navigation, route }: Props) {
       setWasSaved(true);
       showToast('Goal changes saved.', 'success');
       navigation.goBack();
-    } catch (e: any) {
-      captureError('edit_goal_save', e);
-      showToast(e?.message ?? 'Failed to update goal.', 'error');
+    } catch (error: unknown) {
+      captureError('edit_goal_save', error);
+      showToast(getErrorMessage(error, 'Failed to update goal.'), 'error');
     } finally {
       setLoading(false);
     }
@@ -150,9 +151,9 @@ export default function EditGoalScreen({ navigation, route }: Props) {
               setWasSaved(true);
               showToast('Goal deleted.', 'success');
               navigation.navigate('AppTabs');
-            } catch (e: any) {
-              captureError('edit_goal_delete', e);
-              showToast(e?.message ?? 'Failed to delete goal.', 'error');
+            } catch (error: unknown) {
+              captureError('edit_goal_delete', error);
+              showToast(getErrorMessage(error, 'Failed to delete goal.'), 'error');
             } finally {
               setLoading(false);
             }

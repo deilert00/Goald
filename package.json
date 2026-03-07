@@ -15,6 +15,7 @@
     "test:e2e:report": "cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html",
     "test:e2e:full": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js",
     "test:e2e:ci": "cross-env EXPO_PUBLIC_E2E_MODE=true BASE_URL=http://localhost:3000 cucumber-js --config cucumber.js --format progress-bar --format html:reports/cucumber-report.html --format json:reports/cucumber-report.json",
+    "typecheck": "tsc --noEmit",
     "test:unit": "node --import tsx --test tests/**/*.test.ts",
     "admin:support": "node scripts/admin-support.mjs"
   },
@@ -39,17 +40,16 @@
     "react-native-web": "~0.19.13"
   },
   "devDependencies": {
-    "@types/react": "~18.3.12",
-    "typescript": "~5.3.3",
     "@cucumber/cucumber": "^12.7.0",
+    "@types/react": "~18.3.12",
     "cross-env": "^7.0.3",
     "firebase-admin": "^12.6.0",
     "playwright": "^1.52.0",
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "typescript": "~5.3.3"
   },
   "overrides": {
     "tar": ">=7.5.10",
     "@xmldom/xmldom": ">=0.8.0"
   }
 }
-
