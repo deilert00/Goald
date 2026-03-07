@@ -250,6 +250,110 @@ Note:
 - E2E needs stable data:
   - use `npm run web:e2e` and `npm run test:e2e:full`
 
+### Windows: SSH Agent Access Denied
+
+If you receive an **Access Denied** error when trying to set the `ssh-agent` service startup type
+(e.g. `Set-Service -Name ssh-agent -StartupType Automatic`), follow these steps:
+
+#### 1. Run PowerShell as Administrator
+
+All `ssh-agent` service commands require an elevated shell.
+
+1. Press **Win + S**, type `PowerShell`.
+2. Right-click **Windows PowerShell** and choose **Run as administrator**.
+3. Re-run your service command inside the elevated window:
+
+```powershell
+Set-Service -Name ssh-agent -StartupType Automatic
+Start-Service ssh-agent
+```
+
+#### 2. Enable OpenSSH Client / Server optional features
+
+The `ssh-agent` service is provided by the **OpenSSH Client** optional feature (and
+**OpenSSH Server** if you also need `sshd`). If the feature is not installed, the service
+does not exist and all commands fail with Access Denied or "service not found".
+
+**GUI:** Settings → System → Optional features → Add a feature → search for **OpenSSH**.
+
+**PowerShell (elevated):**
+
+```powershell
+# Install OpenSSH Client (required for ssh-agent + ssh)
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+
+# Install OpenSSH Server (optional — only needed if this machine accepts inbound SSH)
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+```
+
+After installation, start the agent from an elevated shell:
+
+```powershell
+Set-Service -Name ssh-agent -StartupType Automatic
+Start-Service ssh-agent
+ssh-add $HOME\.ssh\id_ed25519   # add your key
+```
+
+#### 3. Alternative: Git Credential Manager with HTTPS + PAT
+
+If you cannot change Windows service settings (e.g. on a managed/corporate machine), you can
+authenticate to GitHub over HTTPS using a **Personal Access Token (PAT)** stored by the
+built-in **Git Credential Manager** — no SSH agent required.
+
+1. [Create a PAT](https://github.com/settings/tokens) with the `repo` scope (or `read:packages`
+   if you only need package access).
+2. Change your remote URL to HTTPS:
+
+```bash
+git remote set-url origin https://github.com/<owner>/<repo>.git
+```
+
+3. On the next `git push` / `git pull`, Git will prompt for credentials.  Enter your GitHub
+   **username** and the **PAT** as the password.  Git Credential Manager stores the token
+   securely in the Windows Credential Store — you will not be prompted again.
+
+#### 4. Start ssh-agent without changing the startup type
+
+If you want a one-time session without permanently changing the service configuration:
+
+```powershell
+# Start for this session only (no startup-type change)
+# Note: requires start/stop permission on the service for your user account
+Start-Service ssh-agent
+
+# Confirm it is running
+Get-Service ssh-agent
+
+# Add your key for this session
+ssh-add $HOME\.ssh\id_ed25519
+```
+
+> **Note:** The service will stop when Windows reboots. Repeat `Start-Service ssh-agent` and
+> `ssh-add` at the start of each session, or add them to your PowerShell profile
+> (`$PROFILE`).
+
+#### 5. Alternative SSH agent: Pageant (PuTTY)
+
+[Pageant](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) is PuTTY's SSH
+authentication agent and is a lightweight alternative to the Windows `ssh-agent` service.
+
+1. Download **Pageant** from the PuTTY download page and launch it — it appears in the
+   system tray.
+2. Right-click the tray icon → **Add Key** → select your `.ppk` private key file.  
+   (Use **PuTTYgen** to convert an OpenSSH key to `.ppk` format if needed.)
+3. Tell Git to use Pageant by setting the `GIT_SSH` environment variable:
+
+```powershell
+# For the current session
+$env:GIT_SSH = "C:\Program Files\PuTTY\plink.exe"
+
+# To persist across sessions, add to your PowerShell profile ($PROFILE):
+[System.Environment]::SetEnvironmentVariable("GIT_SSH", "C:\Program Files\PuTTY\plink.exe", "User")
+```
+
+4. On first connect, `plink` will ask you to trust the server's host key — type `y` to
+   cache it, then subsequent `git` operations will authenticate via Pageant automatically.
+
 ## Notes For Contributors
 
 - Keep selectors and user-facing labels stable for E2E reliability.
