@@ -250,6 +250,25 @@ Note:
 - Add new behavior specs under `features/` when adding user-visible flows.
 - Prefer deterministic E2E mode for CI and reproducibility.
 
+## Contributing with AI
+
+This project uses GitHub Copilot with persistent context instructions to keep AI suggestions
+consistent with the project's architecture and conventions.
+
+The instructions file is located at [`.github/copilot-instructions.md`](.github/copilot-instructions.md).
+Copilot reads this file automatically for every chat and inline completion session in VS Code.
+
+Key guardrails enforced by the instructions:
+- All Firestore access goes through `src/services/` — never directly from screens or components
+- Every new service function must include an E2E mode branch using `isE2EMode`
+- TypeScript `strict: true` — no `any` types or `@ts-ignore` without explanation
+- Use `AppButton` for all action buttons; no new TouchableOpacity button patterns
+- Write tests first (TDD) — unit tests for utils/services, BDD scenarios for user flows
+
+**When to update `.github/copilot-instructions.md`:** treat it as living documentation.
+Update it whenever a new architectural decision is made, a new pattern is adopted, or a new
+guardrail is needed. This file is the contract between the team and Copilot.
+
 ## UX Standards
 
 - Product UX requirements and test protocol:
