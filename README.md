@@ -284,3 +284,19 @@ guardrail is needed. This file is the contract between the team and Copilot.
 
 - Full product, platform, security, persistence, admin, and operations requirements:
   - `docs/PRODUCT_REQUIREMENTS_DEVOPS.md`
+
+## Router Session Automation
+
+When the desktop modem-manager tool (or any automation script) needs to call the
+Cheetah M10K21 router HTTP API with an authenticated session:
+
+- Step-by-step guide to capturing the SID/session token using browser DevTools:
+  - `docs/ROUTER_SESSION_CAPTURE.md`
+
+Key topics covered:
+- Opening DevTools and enabling Preserve Log before login
+- Filtering the Network panel for login/session endpoints
+- Extracting the request URL, method, and form payload
+- Locating the SID in the response body, cookies, or localStorage
+- Validating the captured SID via `/api`
+- Troubleshooting rapidly expiring sessions
